@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>资讯检索</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/weui.css"  type="text/css" />
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/add.css"  type="text/css" />
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/css/iscroll.css?tt=11"  type="text/css" />
+<link href="${CONTEXT_PATH}/resources/css/annals/info.css?rand=21" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/jquery.min.js"></script>
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/iscroll.js"></script> 
+</head>
+<body>
+<span style="display:none;" >
+</span><!--代码部分begin-->
+<div id="wrapper">
+	<div id="scroller">
+		 
+		<div id="scroller-content">
+		    <div class="weui-search-bar" id="searchBar">
+            <form class="weui-search-bar__form" >
+                <div class="weui-search-bar__box">
+                    <i class="weui-icon-search"></i>
+                    <INPUT name='keyword' type="search" class="weui-search-bar__input" id="searchInput"   placeholder="搜索" />
+                    <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+                </div>
+                <label class="weui-search-bar__label" id="searchText">
+                    <i class="weui-icon-search"></i>
+                    <span>搜索</span>
+                </label>
+            </form>
+	            <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+	        </div>
+	        <div class="weui-cells searchbar-result"  id="searchResult">
+	            
+	        </div> 
+		
+		
+			 <div class="List">
+					<#list annalsInfoRs.dtolist as annalsDto>
+						<a class="box">
+                            <ul class="text">
+                                    <li>${annalsDto.antitle}</li>
+                            </ul>
+                            <img  src="${annalsDto.thumburl}" class="picture"/>
+						</a> 
+					</#list> 
+			 </div>
+				
+		</div>
+	    </div>
+	    <div id="scroller-pullUp">
+			<span id="up-icon" class="icon-double-angle-up pull-up-icon"></span>
+		    <span id="pullUp-msg" class="pull-up-msg">sdfsdf上拉刷新</span> 
+        </div>
+	</div>
+</div> 
+ 
+<!--代码部分end-->
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){ 
+        var $searchBar = $('#searchBar'),
+            $searchResult = $('#searchResult'),
+            $searchText = $('#searchText'),
+            $searchInput = $('#searchInput'),
+            $searchClear = $('#searchClear'),
+            $searchCancel = $('#searchCancel');
+
+        $('#searchResult').hide();
+        
+        function hideSearchResult(){
+            $searchResult.hide();
+            alert("12334");
+            $searchInput.val('');
+        }
+        function cancelSearch(){
+            hideSearchResult();
+            $searchBar.removeClass('weui-search-bar_focusing');
+            $searchText.show();
+        }
+
+        $searchText.on('click', function(){
+            $searchBar.addClass('weui-search-bar_focusing');
+            $searchInput.focus();
+        });
+        $searchInput
+            /*.on('blur', function () {
+            	alert(!this.value.length);
+                if(!this.value.length) 
+                	cancelSearch();
+            })*/
+            .on('input', function(){
+                if(this.value.length) {
+                    //$searchResult.show();
+                } else {
+                   // $searchResult.hide();
+                }
+            })
+        ;
+        $searchClear.on('click', function(){
+             hideSearchResult();
+            $searchInput.focus();
+        });
+        $searchCancel.on('click', function(){
+            cancelSearch();
+            $searchInput.blur();
+        });
+        
+        
+        
+    });
+    // onsearch="myFc()" required
+    function myFc() {
+    	   alert("123");
+    	}
+</script> 
+<script  type="text/javascript">  
+
+//懒人之家 www.lanrenzhijia.com
+function loaded () {
+    var myScroll,
+        upIcon = $("#up-icon"), 
+        distance = 30; //滑动距离
+        
+        
+        myScroll= new IScroll("#wrapper", {
+            hScrollbar: false,
+            useTransition: true,
+            onBeforeScrollStart: function(e) {
+                var P = e.target;
+                while (P.nodeType != 1) {
+                    P = P.parentNode
+                    alert(P.tagName);
+                }
+                
+                if (P.tagName != "SELECT" && P.tagName != "input" && P.tagName != "TEXTAREA") {
+                    if ($.system.type() == "android") {
+                       // $("#account").blur();
+                      //  $("#accountTel").blur()
+                    } else {
+                        e.preventDefault()
+                    }
+                }
+            }
+        });
+    //myScroll = new IScroll('#wrapper', { probeType: 3, mouseWheel: true });
+
+    myScroll.on("scroll",function(){
+        var y = this.y,
+            maxY = this.maxScrollY - y,
+             
+            upHasClass = upIcon.hasClass("reverse_icon");
+
+        
+       if(maxY >= distance){
+            !upHasClass && upIcon.addClass("reverse_icon");
+            return "";
+        }else if(maxY < distance && maxY >=0){
+            upHasClass && upIcon.removeClass("reverse_icon");
+            return "";
+        } 
+    });
+    function upAjax(){
+        var params = '{"params":{"shopType":"0","sort":"0","cityId":"1","pageRows":"10","deviceType":"MX4","toPage":"1","userX":"118.790609","userY":"32.047616","filter":"0"}}';
+        $.ajax({
+            type: "post",
+            url: "url",
+            data: params,
+            crossDomain: true,
+            xhrFields: {
+                withCredentials: true
+            },
+            dataType: "json",
+            contentType: "application/json; charset=utf-8"
+        }).done(function(d) {
+            if (d && d.response.shopList.length > 0) {
+                console.log(d.response.shopList);
+                var content = "";
+                for(var i=0,len=d.response.shopList.length;i<len;i++){
+                    content += "<li>"+ d.response.shopList[i].shopName +"</li>"
+                }
+                $('#scroller-content ul').append(content);
+                myScroll.refresh(d.response.page.pageAmount);
+            }
+        }).fail(function() {
+            document.getElementById('list').innerHTML = "<font style='font-size:0.16rem;'>数据请求失败，请重新刷新</font>";
+        })
+    }
+
+    
+    
+    // 上拉滑动事件
+    myScroll.on("slideUp",function(){
+        if(this.maxScrollY - this.y > distance){
+           // upAjax();
+            upIcon.removeClass("reverse_icon")
+        }
+    });
+}
+loaded ();
+
+</script>

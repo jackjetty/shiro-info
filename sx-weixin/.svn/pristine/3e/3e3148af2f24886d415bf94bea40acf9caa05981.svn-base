@@ -1,0 +1,417 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>  
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>事故微处</title>
+<link href="${CONTEXT_PATH}/resources/css/accident/capture.css" rel="stylesheet" type="text/css">
+<link href="${CONTEXT_PATH}/resources/css/sweet-alert.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/jquery.min.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/sweet-alert.min.js"></script> 
+<script type="text/javascript">
+	 
+
+	wx.config({
+	    debug: false,
+	    appId: "${WxAppId}", // 必填，公众号的唯一标识
+	    timestamp:"${WxTimestamp}", // 必填，生成签名的时间戳
+	    nonceStr: "${WxNoncestr}", // 必填，生成签名的随机串
+	    signature: "${WxSignature}",// 必填，签名，见附录1
+	    jsApiList: [ 
+	      'closeWindow',
+	      'scanQRCode',
+	      'hideOptionMenu',
+	      'chooseImage',
+	      'uploadImage'
+	    ]
+	});
+	var imageAddressArray = new Array();
+	$(document).ready(function() {
+		/*$.ajax({
+			timeout:100000
+			其他配置
+		});*/ 
+
+		 
+
+	});
+ 
+	 
+</script>
+<body>
+
+	<form method="post"   id="saveForm"  >
+			  
+			 
+	
+		<div class="page"> 
+			<div class="title">
+				<img src="${CONTEXT_PATH}/resources/image/accident/fw.png" /> <b>上传事故照片</b>
+			</div>
+			<div class="information">
+				<div class="box">
+					<div class="box1" style="border: 0;">
+						<span>现场拍照-概览照</span>
+					</div>
+					<div class="box1">
+						<div align="center">
+							<img id="imgoverview" src="${CONTEXT_PATH}/resources/image/accident/overview.png" width="250px" height="140px" class="upload"
+								   title="概览"  />
+						    <input name="overviewpath"  type="hidden" value=""/>
+						</div>
+						<p>站在道路中间拍摄，标志、标线拍清楚，在事故车前、后方约8米处进行拍照。（点击上方示意图可进行拍照或图片选择。）</p>
+					</div>
+					<div class="box1" style="border: 0;">
+						<span>现场拍照-中心照</span>
+					</div>
+					<div class="box1">
+						<div align="center">
+							<img id="imgcenter" src="${CONTEXT_PATH}/resources/image/accident/center.png" width="250px" height="140px" class="upload"
+								 title="中心"  >
+							<input name="centerpath"  type="hidden" value=""/>	
+								
+						</div>
+						<p>请在事故车前、后方约4米处进行拍照上传，照片要求能看清车辆的停车位置。（点击上方示意图可进行拍照或图片选择。）</p>
+					</div>
+					<div class="box1" style="border: 0;">
+						<span>现场拍照-细目照</span>
+					</div>
+					<div class="box1">
+						<div align="center">
+							<img id="imgdetail" src="${CONTEXT_PATH}/resources/image/accident/detail.png" width="250px" height="140px" class="upload"
+								 title="细目" alt="2">
+							 <input name="detailpath"  type="hidden" value=""/>	
+						</div>
+						<p>请按照图示要求拍照，照片要求能看清车辆的碰撞位置，损坏情况。（点击上方示意图可进行拍照或图片选择。）</p>
+					</div>
+					<div class="box1" style="border: 0;">
+						<span>现场拍照-双方驾驶证行驶证照片</span>
+					</div>
+					
+					<div class="box1">
+
+						<div align="center">
+							<img id="imgpaper" src="${CONTEXT_PATH}/resources/image/accident/choose.jpg" width="250px" height="140px" class="upload"
+								  title="信息" alt="3">
+							<input name="paperpath"  type="hidden" value=""/>		
+						</div>
+						<p>请将双方驾驶证、行驶证、交强险保单（或交强险粘贴标志）一同拍照上传。 </p>
+					</div>
+					<div class="box1" style="border: 0;">
+						<span>现场拍照-附加照片</span>
+					</div>
+					<div class="box1" style="border: 0;">
+
+						<div  align="center">
+						    
+						
+						 <!--   <div class="more-box">
+						      <div    class="clear">
+						          <img  src="${CONTEXT_PATH}/resources/image/icon/delete.png"  alt="删除"/>
+						      </div>
+						       <img src="http://hotel.weiximen.com/sx-weixin/file/image.jpg?imgpath=/2017-01-04/76a84d25.jpg"  class="upload" />
+						       <input type="hidden" name="morepath" />
+						  </div>-->
+						   
+								 
+								 
+								 
+								 
+							<div class="add">	 
+									<img id="imgmore"  src="${CONTEXT_PATH}/resources/image/accident/choose.jpg"   class='addIcon'
+										 title="附图" alt="4">
+							  </div>
+						</div>
+						
+						<p>附加照片可多张。</p>
+					</div>
+				</div>
+			</div>
+			<a class="submit" href="javascript:fnSubmit()">提交</a>
+		</div>
+		
+	 </form> 
+</body>
+
+</html>
+<script type="text/javascript">
+
+
+
+function fnSubmit(){
+	
+	var overviewpath=$.trim($('input[name=overviewpath]').val());
+	var centerpath=$.trim($('input[name=centerpath]').val());
+	var detailpath=$.trim($('input[name=detailpath]').val());
+	var paperpath=$.trim($('input[name=paperpath]').val());
+	if(overviewpath.length<1){
+		swal("信息不完整", "请选择前方照片!","error");
+		 
+		return false;
+	}
+	if(centerpath.length<1){
+		swal("信息不完整", "请选择后方照片!","error");
+		 
+		return false;
+	}
+	if(detailpath.length<1){
+		swal("信息不完整", "请选择碰撞处照片!","error");
+		 
+		return false;
+	}
+	if(paperpath.length<1){
+		swal("信息不完整", "请选择信息照片!","error");
+	 
+		return false;
+	}
+	
+	/*
+	if($('input[name=morepath]').length<1){
+		alert("请上传图片信息!");
+		return false;
+	}*/
+	
+	 
+	
+	
+	$.ajax({
+		url : "${CONTEXT_PATH}/accident/gain_image",
+		data : $("form").serialize(),
+		dataType : "json",
+		async : false,
+		type : "post",
+		success:function(data){
+			if(data.code==0){
+				//window.location.href="${CONTEXT_PATH}/accident/capture"; 
+				 
+				swal({   title: "谢谢!",   text: data.info,   type: "info",   
+	        		 showCancelButton: false,   closeOnConfirm: false  }, 
+	        			 function(){  wx.closeWindow();});
+				 
+				return false;
+			}
+			if(data.code==3){
+				swal({   title: "出错!",   text: data.info,   type: "error",   
+	        		 showCancelButton: false,   closeOnConfirm: false  }, 
+	        			 function(){  wx.closeWindow();});
+				 
+				
+				return false;
+			}
+			else{
+				swal("出错", data.info, "error");  
+			}
+		},
+		error:function(){
+			swal("网络异常！");  
+		}
+	});
+}
+
+ 
+ 
+
+//alert($("#imgoverview").nextAll().find("input").length);
+
+//alert($("#imgoverview").next().val());
+
+//alert(.attr("src"));
+
+
+$(".box1").on("click",".clear", function() {
+	$(this).parent().remove(); 
+});
+ 
+
+
+$(".add").click(function(){
+	wx.chooseImage({
+	    count: 9, // 默认9
+	    sizeType: [ 'compressed','compressed'], // 可以指定是原图还是压缩图，默认二者都有
+	    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+	    success: function (res) {
+	    	var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+            //上传图片接口
+            /*
+            wx.uploadImage({
+                localId: localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                    var serverId = res.serverId; // 返回图片的服务器端ID
+                    
+                    fnDownMediaMore( serverId );
+                    
+                }
+            });*/
+            syncUpload(localIds);
+            
+	    }
+	});
+	
+});
+
+
+function syncUpload(localIds){
+    var localId = localIds.pop();
+    wx.uploadImage({
+        localId: localId,
+        isShowProgressTips: 1,
+        success: function (res) {
+            var serverId = res.serverId; // 返回图片的服务器端ID
+            fnDownMediaMore( serverId );
+            
+            if(localIds.length > 0){
+                syncUpload(localIds);
+            }
+
+            
+        }
+    });
+};
+
+function fnDownMediaMore(mediaId ){
+	
+	 
+	$.ajax({
+		url : "${CONTEXT_PATH}/download_media",
+		dataType : "json",
+		type : "post",
+		data : {
+			mediaId : mediaId  
+		},
+		success : function(data) { 
+			if(data.code==0){
+				
+				
+				var html='';
+				html+='<div class="more-box">';
+				html+='    <div    class="clear">';
+				html+='        <img  src="${CONTEXT_PATH}/resources/image/icon/delete.png"  alt="删除"/>';
+				html+='    </div>'; 
+				html+='    <img src="'+data.mediaUrl+'"  class="upload" />'; 
+				html+='    <input type="hidden" name="morepath" value="'+data.mediaPath+'" />'; 
+				html+='</div>';      
+			    $(".add").before($(html));  
+			       
+			        
+				 
+			}
+		}
+	});
+}
+
+
+
+
+
+$("#imgoverview").click(function(){
+	
+	
+	
+	wx.chooseImage({
+		    count: 9, // 默认9
+		    sizeType: [ 'compressed','compressed'], // 可以指定是原图还是压缩图，默认二者都有
+		    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+		    success: function (res) {
+		    	var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                //alert(localIds.length); 
+                	 fnMassUpload(0, localIds); 
+		    }
+		});
+});
+
+
+//群发
+function fnMassUpload(index,localIds){
+	//上传图片接口
+	
+	var localId=localIds.shift();
+	 
+	
+     wx.uploadImage({
+        localId: localId.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+        isShowProgressTips: 1, // 默认为1，显示进度提示
+        success: function (res) {
+            var serverId = res.serverId; // 返回图片的服务器端ID
+            
+            if(index==0) 
+                fnDownMedia( serverId,$("#imgoverview"),$("#imgoverview").next());
+            if(index==1) 
+                fnDownMedia( serverId,$("#imgcenter"),$("#imgcenter").next());
+            if(index==2) 
+                fnDownMedia( serverId,$("#imgdetail"),$("#imgdetail").next());
+            if(index==3) 
+                fnDownMedia( serverId,$("#imgpaper"),$("#imgpaper").next());
+            if(index>3){
+            	 fnDownMediaMore( serverId );
+            }
+            if(localIds.length>0)
+                fnMassUpload(++index,localIds);
+        }
+    }); 
+	
+}
+
+
+
+$("#imgcenter,#imgdetail,#imgpaper").click(function(){
+	
+	
+	var imgview=$(this);
+	var imgpath=$(this).next(); 
+	wx.chooseImage({
+		    count: 1, // 默认9
+		    sizeType: [ 'compressed','compressed'], // 可以指定是原图还是压缩图，默认二者都有
+		    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+		    success: function (res) {
+		    	var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                //上传图片接口
+                wx.uploadImage({
+                    localId: localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                         
+                        fnDownMedia( serverId,imgview,imgpath);
+                        
+                    }
+                });
+		    }
+		});
+});
+
+
+function fnDownMedia(mediaId,imgview,imgpath){
+	
+	//alert(imgview.attr("src"));
+	$.ajax({
+		url : "${CONTEXT_PATH}/download_media",
+		dataType : "json",
+		type : "post",
+		data : {
+			mediaId : mediaId  
+		},
+		success : function(data) { 
+			if(data.code==0){
+				imgview.attr("src",  data.mediaUrl);
+				imgpath.val(data.mediaPath);
+				 
+			}
+		}
+	});
+}
+
+
+
+
+
+
+
+
+</script>
+  

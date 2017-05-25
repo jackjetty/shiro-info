@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sx.weixin.dao.ArticleDelictMapper" >
+  <resultMap id="BaseResultMap" type="com.sx.weixin.model.ArticleDelictModel" >
+    <id column="adId" property="adid" jdbcType="INTEGER" />
+    <result column="adTitle" property="adtitle" jdbcType="VARCHAR" />
+    <result column="adAuthor" property="adauthor" jdbcType="VARCHAR" />
+    <result column="createDate" property="createdate" jdbcType="TIMESTAMP" />
+    <result column="updateDate" property="updatedate" jdbcType="TIMESTAMP" />
+    <result column="issueDate" property="issuedate" jdbcType="TIMESTAMP" />
+    <result column="sortSN" property="sortsn" jdbcType="INTEGER" />
+    <result column="picLocation" property="piclocation" jdbcType="VARCHAR" />
+    <result column="adSource" property="adsource" jdbcType="VARCHAR" />
+    <result column="adValid" property="advalid" jdbcType="BIT" />
+    <result column="adUrl" property="adurl" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.sx.weixin.model.ArticleDelictModel" extends="BaseResultMap" >
+    <result column="htmContent" property="htmcontent" jdbcType="CLOB" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    adId, adTitle, adAuthor, createDate, updateDate, issueDate, sortSN, picLocation, 
+    adSource, adValid, adUrl, remark
+  </sql>
+  <sql id="Blob_Column_List" >
+    htmContent
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from Tb_ArticleDelict
+    where adId = #{adid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Tb_ArticleDelict
+    where adId = #{adid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sx.weixin.model.ArticleDelictModel" >
+    insert into Tb_ArticleDelict (adId, adTitle, adAuthor, 
+      createDate, updateDate, issueDate, 
+      sortSN, picLocation, adSource, 
+      adValid, adUrl, remark, 
+      htmContent)
+    values (#{adid,jdbcType=INTEGER}, #{adtitle,jdbcType=VARCHAR}, #{adauthor,jdbcType=VARCHAR}, 
+      #{createdate,jdbcType=TIMESTAMP}, #{updatedate,jdbcType=TIMESTAMP}, #{issuedate,jdbcType=TIMESTAMP}, 
+      #{sortsn,jdbcType=INTEGER}, #{piclocation,jdbcType=VARCHAR}, #{adsource,jdbcType=VARCHAR}, 
+      #{advalid,jdbcType=BIT}, #{adurl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{htmcontent,jdbcType=CLOB})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sx.weixin.model.ArticleDelictModel" >
+    insert into Tb_ArticleDelict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="adid != null" >
+        adId,
+      </if>
+      <if test="adtitle != null" >
+        adTitle,
+      </if>
+      <if test="adauthor != null" >
+        adAuthor,
+      </if>
+      <if test="createdate != null" >
+        createDate,
+      </if>
+      <if test="updatedate != null" >
+        updateDate,
+      </if>
+      <if test="issuedate != null" >
+        issueDate,
+      </if>
+      <if test="sortsn != null" >
+        sortSN,
+      </if>
+      <if test="piclocation != null" >
+        picLocation,
+      </if>
+      <if test="adsource != null" >
+        adSource,
+      </if>
+      <if test="advalid != null" >
+        adValid,
+      </if>
+      <if test="adurl != null" >
+        adUrl,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="htmcontent != null" >
+        htmContent,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="adid != null" >
+        #{adid,jdbcType=INTEGER},
+      </if>
+      <if test="adtitle != null" >
+        #{adtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="adauthor != null" >
+        #{adauthor,jdbcType=VARCHAR},
+      </if>
+      <if test="createdate != null" >
+        #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedate != null" >
+        #{updatedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="issuedate != null" >
+        #{issuedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sortsn != null" >
+        #{sortsn,jdbcType=INTEGER},
+      </if>
+      <if test="piclocation != null" >
+        #{piclocation,jdbcType=VARCHAR},
+      </if>
+      <if test="adsource != null" >
+        #{adsource,jdbcType=VARCHAR},
+      </if>
+      <if test="advalid != null" >
+        #{advalid,jdbcType=BIT},
+      </if>
+      <if test="adurl != null" >
+        #{adurl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="htmcontent != null" >
+        #{htmcontent,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sx.weixin.model.ArticleDelictModel" >
+    update Tb_ArticleDelict
+    <set >
+      <if test="adtitle != null" >
+        adTitle = #{adtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="adauthor != null" >
+        adAuthor = #{adauthor,jdbcType=VARCHAR},
+      </if>
+      <if test="createdate != null" >
+        createDate = #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedate != null" >
+        updateDate = #{updatedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="issuedate != null" >
+        issueDate = #{issuedate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sortsn != null" >
+        sortSN = #{sortsn,jdbcType=INTEGER},
+      </if>
+      <if test="piclocation != null" >
+        picLocation = #{piclocation,jdbcType=VARCHAR},
+      </if>
+      <if test="adsource != null" >
+        adSource = #{adsource,jdbcType=VARCHAR},
+      </if>
+      <if test="advalid != null" >
+        adValid = #{advalid,jdbcType=BIT},
+      </if>
+      <if test="adurl != null" >
+        adUrl = #{adurl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="htmcontent != null" >
+        htmContent = #{htmcontent,jdbcType=CLOB},
+      </if>
+    </set>
+    where adId = #{adid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sx.weixin.model.ArticleDelictModel" >
+    update Tb_ArticleDelict
+    set adTitle = #{adtitle,jdbcType=VARCHAR},
+      adAuthor = #{adauthor,jdbcType=VARCHAR},
+      createDate = #{createdate,jdbcType=TIMESTAMP},
+      updateDate = #{updatedate,jdbcType=TIMESTAMP},
+      issueDate = #{issuedate,jdbcType=TIMESTAMP},
+      sortSN = #{sortsn,jdbcType=INTEGER},
+      picLocation = #{piclocation,jdbcType=VARCHAR},
+      adSource = #{adsource,jdbcType=VARCHAR},
+      adValid = #{advalid,jdbcType=BIT},
+      adUrl = #{adurl,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      htmContent = #{htmcontent,jdbcType=CLOB}
+    where adId = #{adid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sx.weixin.model.ArticleDelictModel" >
+    update Tb_ArticleDelict
+    set adTitle = #{adtitle,jdbcType=VARCHAR},
+      adAuthor = #{adauthor,jdbcType=VARCHAR},
+      createDate = #{createdate,jdbcType=TIMESTAMP},
+      updateDate = #{updatedate,jdbcType=TIMESTAMP},
+      issueDate = #{issuedate,jdbcType=TIMESTAMP},
+      sortSN = #{sortsn,jdbcType=INTEGER},
+      picLocation = #{piclocation,jdbcType=VARCHAR},
+      adSource = #{adsource,jdbcType=VARCHAR},
+      adValid = #{advalid,jdbcType=BIT},
+      adUrl = #{adurl,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where adId = #{adid,jdbcType=INTEGER}
+  </update>
+  
+  
+  <!-- 自定义 -->
+  <select id="getValidArticleDelictList"   resultType="com.sx.weixin.model.ArticleDelictModel">
+    select <include refid="Base_Column_List" /> from Tb_ArticleDelict   
+    
+    where  adValid=1
+     
+    order by sortSN  
+  </select>
+   
+</mapper>

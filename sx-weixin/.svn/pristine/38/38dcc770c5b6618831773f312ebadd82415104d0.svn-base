@@ -1,0 +1,17 @@
+package com.sx.weixin.service;
+import org.rising.wei.bean.BaseBean;
+
+import com.sx.weixin.rs.MonitorMapRs;
+import com.sx.weixin.rs.MonitorSpotsRs;
+ 
+  
+
+
+
+
+public interface IMonitorService extends IBaseService{
+
+	public  MonitorMapRs  mapMonitor();
+	public  MonitorSpotsRs  queryMonitorSpots(String monitorType,String  position, float bigLat, float smallLat,float bigLng,float smallLng);
+	   
+}

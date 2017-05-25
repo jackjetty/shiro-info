@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sx.weixin.dao.HitchMapper" >
+  <resultMap id="BaseResultMap" type="com.sx.weixin.model.HitchModel" >
+    <id column="hitchId" property="hitchid" jdbcType="VARCHAR" />
+    <result column="reportOpenId" property="reportopenid" jdbcType="VARCHAR" />
+    <result column="reportTime" property="reporttime" jdbcType="TIMESTAMP" />
+    <result column="reportPhoneNumber" property="reportphonenumber" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="locationX" property="locationx" jdbcType="VARCHAR" />
+    <result column="locationY" property="locationy" jdbcType="VARCHAR" />
+    <result column="hitchState" property="hitchstate" jdbcType="VARCHAR" />
+    <result column="handleTime" property="handletime" jdbcType="TIMESTAMP" />
+    <result column="handler" property="handler" jdbcType="VARCHAR" />
+    <result column="hitchDes" property="hitchdes" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    hitchId, reportOpenId, reportTime, reportPhoneNumber, address, locationX, locationY, 
+    hitchState, handleTime, handler, hitchDes, remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from Tb_Hitch
+    where hitchId = #{hitchid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from Tb_Hitch
+    where hitchId = #{hitchid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sx.weixin.model.HitchModel" >
+    insert into Tb_Hitch (hitchId, reportOpenId, reportTime, 
+      reportPhoneNumber, address, locationX, 
+      locationY, hitchState, handleTime, 
+      handler, hitchDes, remark
+      )
+    values (#{hitchid,jdbcType=VARCHAR}, #{reportopenid,jdbcType=VARCHAR}, #{reporttime,jdbcType=TIMESTAMP}, 
+      #{reportphonenumber,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{locationx,jdbcType=VARCHAR}, 
+      #{locationy,jdbcType=VARCHAR}, #{hitchstate,jdbcType=VARCHAR}, #{handletime,jdbcType=TIMESTAMP}, 
+      #{handler,jdbcType=VARCHAR}, #{hitchdes,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sx.weixin.model.HitchModel" >
+    insert into Tb_Hitch
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hitchid != null" >
+        hitchId,
+      </if>
+      <if test="reportopenid != null" >
+        reportOpenId,
+      </if>
+      <if test="reporttime != null" >
+        reportTime,
+      </if>
+      <if test="reportphonenumber != null" >
+        reportPhoneNumber,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="locationx != null" >
+        locationX,
+      </if>
+      <if test="locationy != null" >
+        locationY,
+      </if>
+      <if test="hitchstate != null" >
+        hitchState,
+      </if>
+      <if test="handletime != null" >
+        handleTime,
+      </if>
+      <if test="handler != null" >
+        handler,
+      </if>
+      <if test="hitchdes != null" >
+        hitchDes,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hitchid != null" >
+        #{hitchid,jdbcType=VARCHAR},
+      </if>
+      <if test="reportopenid != null" >
+        #{reportopenid,jdbcType=VARCHAR},
+      </if>
+      <if test="reporttime != null" >
+        #{reporttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reportphonenumber != null" >
+        #{reportphonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="locationx != null" >
+        #{locationx,jdbcType=VARCHAR},
+      </if>
+      <if test="locationy != null" >
+        #{locationy,jdbcType=VARCHAR},
+      </if>
+      <if test="hitchstate != null" >
+        #{hitchstate,jdbcType=VARCHAR},
+      </if>
+      <if test="handletime != null" >
+        #{handletime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handler != null" >
+        #{handler,jdbcType=VARCHAR},
+      </if>
+      <if test="hitchdes != null" >
+        #{hitchdes,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sx.weixin.model.HitchModel" >
+    update Tb_Hitch
+    <set >
+      <if test="reportopenid != null" >
+        reportOpenId = #{reportopenid,jdbcType=VARCHAR},
+      </if>
+      <if test="reporttime != null" >
+        reportTime = #{reporttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reportphonenumber != null" >
+        reportPhoneNumber = #{reportphonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="locationx != null" >
+        locationX = #{locationx,jdbcType=VARCHAR},
+      </if>
+      <if test="locationy != null" >
+        locationY = #{locationy,jdbcType=VARCHAR},
+      </if>
+      <if test="hitchstate != null" >
+        hitchState = #{hitchstate,jdbcType=VARCHAR},
+      </if>
+      <if test="handletime != null" >
+        handleTime = #{handletime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handler != null" >
+        handler = #{handler,jdbcType=VARCHAR},
+      </if>
+      <if test="hitchdes != null" >
+        hitchDes = #{hitchdes,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where hitchId = #{hitchid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sx.weixin.model.HitchModel" >
+    update Tb_Hitch
+    set reportOpenId = #{reportopenid,jdbcType=VARCHAR},
+      reportTime = #{reporttime,jdbcType=TIMESTAMP},
+      reportPhoneNumber = #{reportphonenumber,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      locationX = #{locationx,jdbcType=VARCHAR},
+      locationY = #{locationy,jdbcType=VARCHAR},
+      hitchState = #{hitchstate,jdbcType=VARCHAR},
+      handleTime = #{handletime,jdbcType=TIMESTAMP},
+      handler = #{handler,jdbcType=VARCHAR},
+      hitchDes = #{hitchdes,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where hitchId = #{hitchid,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <!-- 自定义 --> 
+  <select id="maxHitchId"    resultType="java.lang.String">
+    select max(hitchId)  from Tb_Hitch   
+    
+    where 1 = 1
+    
+    <if test="reporttime != null  ">
+        and reportTime  &gt;= #{reporttime,jdbcType=TIMESTAMP}
+    </if> 
+  </select>
+  
+</mapper>

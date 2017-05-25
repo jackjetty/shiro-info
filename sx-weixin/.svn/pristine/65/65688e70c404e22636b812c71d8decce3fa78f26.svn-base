@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>事故微处</title>
+<link href="${CONTEXT_PATH}/resources/css/accident/guide.css" rel="stylesheet" type="text/css"> 
+</head>
+
+<body>
+<div class="page">
+	 
+	<div class="pic">
+			<img src="${CONTEXT_PATH}/resources/image/accident/photo.png"/>
+	</div>
+	<div class="main">
+			<div class="box">
+					<h1>
+							<div class="title">
+									<img src="${CONTEXT_PATH}/resources/image/accident/remind.png"/>
+									<b>安全提醒</b>
+							</div>
+							<span>请确保安全，放置警示标志，开启双闪，人员撤离到安全地带。</span>
+					</h1>
+			</div>
+			<div class="box">
+					<h1>
+							<div class="title">
+									<img src="${CONTEXT_PATH}/resources/image/accident/zj.png"/>
+									<b>查验证件</b>
+							</div>
+							<span>请双方当事人相互查验证件(驾驶证、行驶证、保险)。</span>
+					</h1>
+			</div>
+	</div>
+	<a   class="submit"  href="${CONTEXT_PATH}/accident/brief">知道了</a>
+</div>
+</body>
+ 
+</html>

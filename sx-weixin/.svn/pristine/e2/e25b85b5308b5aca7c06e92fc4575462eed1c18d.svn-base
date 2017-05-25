@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+<title>违停报警</title>
+<link type="text/css" rel="stylesheet" href="${CONTEXT_PATH}/resources/js/tencent/css/style.css" />
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/weui.css" type="text/css" />
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/add.css" type="text/css" />
+<link type="text/css" rel="stylesheet" href="${CONTEXT_PATH}/resources/css/parkspot/map.css" />
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/jquery.min.js"></script>
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/tencent/msgbox.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> 
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=QV5BZ-OLTHG-NKMQF-I4KIQ-7A356-HVFQM"></script>
+
+<script type="text/javascript"> 
+	wx.config({
+	    debug: false,
+	    appId: "${WxAppId}", // 必填，公众号的唯一标识
+	    timestamp:"${WxTimestamp}", // 必填，生成签名的时间戳
+	    nonceStr: "${WxNoncestr}", // 必填，生成签名的随机串
+	    signature: "${WxSignature}",// 必填，签名，见附录1
+	    jsApiList: [ 
+	      'closeWindow',
+	      'scanQRCode',
+	      'hideOptionMenu',
+	      'chooseImage',
+	      'uploadImage',
+	      "getLocation"
+	    ]
+	}); 
+ 
+	
+	
+	wx.ready(function(){
+	     wx.getLocation({
+		    type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+		    success: function (res) { 
+		    	 
+		        var speed = res.speed; // 速度，以米/每秒计
+		        var accuracy = res.accuracy; // 位置精度
+		        
+		         fnPanLoc(res.latitude,res.longitude);
+		         
+		    },
+		    error: function (res) {
+		    	alert("地理位置获取失败"); 
+	           	return false;
+		    }
+		 });
+	   
+	});
+</script>
+
+<script type="text/javascript">
+	$(function() {
+		ZENG.msgbox.show("加载中...", 6);
+	});
+
+	/***************地图相关js代码***************/
+	var map, markersArray = [], infoWinArray = [];
+	var initFlag = true;
+	var beforeCenter;
+	
+	function  fnPanLoc(lat,lng){
+		   map.panTo(new qq.maps.LatLng(lat,lng));
+		   beforeCenter=new qq.maps.LatLng(lat,lng);
+		   fnSpotsList();
+		   
+     }
+	$(function() {
+		$("#container").css("height", $(window).height() -100);
+		$("#container").css("width", $(window).width());
+
+		//30.00325, 120.5800953
+		var center = new qq.maps.LatLng(30.003738, 120.579567);
+		beforeCenter=center;
+		map = new qq.maps.Map(document.getElementById('container'), {
+			center : center,
+			zoomControl : true,
+			scrollwheel: true,
+			disableDoubleClickZoom: false,
+			zoom : 17,
+			scaleControl: true,
+	        scaleControlOptions: {
+	            //设置控件位置相对右下角对齐，向左排列
+	            position: qq.maps.ControlPosition.BOTTOM_RIGHT
+	        }
+		});
+
+		qq.maps.event.addListener(map, 'mousemove', function(event) {
+
+		});
+
+		qq.maps.event.addListener(map, 'bounds_changed', function() {
+			ZENG.msgbox._hide();
+			var newCenter = map.getCenter(); 
+			if (Math.abs(newCenter.getLat()-beforeCenter.getLat()) > 0.0025
+					|| Math.abs(newCenter.getLng()-newCenter.getLng()) > 0.0025) {
+				beforeCenter=newCenter; 
+				fnSpotsList();
+			}
+		});
+
+	});
+
+	function showMarker(map, icon, location, psname, psaddress) {
+
+		var marker = new qq.maps.Marker({
+			icon : icon,
+			position : location,
+			map : map
+		});
+
+		var info = new qq.maps.InfoWindow({
+			map : map
+		});
+		var html = '';
+
+		qq.maps.event
+				.addListener(
+						marker,
+						'click',
+						function() {
+							clearInfoWin();
+							info.open();
+							html = '<div style="text-align:left; white-space:nowrap; margin:1px;">'
+									+ psname + '<br>';
+							//html+=' <img src="${CONTEXT_PATH}/resources/image/parkspot/call.png" width="12px" height="12px">&nbsp&nbsp'+pscontact+"</a>";
+							html += '</div>';
+							info.setContent(html);
+							info.setPosition(marker);
+						});
+
+		markersArray.push(marker);
+		infoWinArray.push(info);
+	}
+
+	function clearMarker() {
+		if (markersArray) {
+			for (i in markersArray) {
+				markersArray[i].setMap(null);
+			}
+		}
+		if (infoWinArray) {
+			for (i in infoWinArray) {
+
+				infoWinArray[i].setMap(null);
+			}
+		}
+		markersArray = [];
+		infoWinArray = [];
+
+	}
+
+	function clearInfoWin() {
+		if (infoWinArray) {
+			for (i in infoWinArray) {
+
+				infoWinArray[i].close();
+			}
+		}
+	}
+
+	function fnSpotsList() {
+		clearMarker();
+		 var center =map.getCenter() ;
+
+		if (center == null)
+			return;
+
+		$.ajax({
+					url : "${CONTEXT_PATH}/parkspot/spots",
+					async : true,
+					data : {
+						bigLat :center.getLat()+0.0025,
+						smallLat : center.getLat()-0.0025,
+						bigLng : center.getLng()+0.0025,
+						smallLng : center.getLng()-0.0025
+					},
+					dataType : "json",
+					type : "post",
+					success : function(data) {
+						if (data.code == 0) {
+							// 标记
+							var anchor = new qq.maps.Point(0, 15);
+							size = new qq.maps.Size(25, 30);
+							var origin = new qq.maps.Point(0, 0);
+							var iconPath = "${CONTEXT_PATH}/resources/image/parkspot/spot.png";
+							var parkSpotDto;
+							var icon;
+							icon = new qq.maps.MarkerImage(iconPath, size,
+									origin, anchor);
+							$(data.parkSpotDtoList)
+									.each(
+											function(ind) {
+												parkSpotDto = data.parkSpotDtoList[ind];
+
+												//monitor.direction
+
+												showMarker(
+														map,
+														icon,
+														new qq.maps.LatLng(
+																parkSpotDto.latitude,
+																parkSpotDto.longitude),
+														parkSpotDto.psname,
+														parkSpotDto.psaddress);
+
+											});
+						}
+					},
+					error : function(data) {
+						alert("error 后台出现错误！");
+					}
+				});
+	}
+</script>
+</head>
+<body>
+	<!--  class="header FixedTop"  -->
+	<div class="page">
+		<div id="container"></div>
+		<div class="main">
+			<div class="box">
+				 
+				
+				<h1>
+					<div class="title">
+						<img src="${CONTEXT_PATH}/resources/image/parkspot/scope.png" /> <b>适用声明</b>
+					</div>
+					<span>以上标志<img src="${CONTEXT_PATH}/resources/image/parkspot/spot.png" style="width:18px;height:20px;"/>为违停自动抓拍点，前后50米为违停区域，请按道路标识行车，仅作参考。</span>
+				</h1>
+			</div>
+			<div class="box">
+				
+			</div>
+		</div>
+		<footer>
+		<div class="copyright">
+			<img src="${CONTEXT_PATH}/resources/image/logo.png" class="logo" /> <span>绍兴市公安局交通警察支队
+				版权所有</span>
+		</div>
+		</footer>
+	</div>
+</body>
+</html>

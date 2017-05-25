@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="author" content="www.frebsite.nl" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" /> 
+	<title>警务地图</title>  
+	<link type="text/css" rel="stylesheet" href="${CONTEXT_PATH}/resources/js/tencent/css/style.css" /> 
+	<style type="text/css">
+	   #container
+		{
+		padding: 0px 0px 0px 0px; 
+		}
+		a{
+			text-decoration:none;
+		} 
+	</style> 
+	<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/jquery.min.js"></script> 
+	<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/tencent/msgbox.js"></script>
+	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=QV5BZ-OLTHG-NKMQF-I4KIQ-7A356-HVFQM"></script>
+	<script type="text/javascript">
+		$(function() {
+			ZENG.msgbox.show("加载中...", 6);
+		});
+		 
+		
+		
+		
+
+		/***************地图相关js代码***************/
+		var map, markersArray = [], infoWinArray = [];
+		var initFlag=true;
+		var beforeNorthEastLat=0;
+		var beforeNorthEastLng=0;
+		$(function() {
+			$("#container").css("height", $(window).height()  );
+			$("#container").css("width", $(window).width());
+			
+			var center = new qq.maps.LatLng(30.00325, 120.5800953);
+			map = new qq.maps.Map(document.getElementById('container'), {
+		        center: center,
+		        zoomControl: true,
+		        zoom:17 
+		    });
+			   
+		 	 
+			   qq.maps.event.addListener(map,'mousemove',function(event) {
+				   
+				   
+			    });
+			 /* qq.maps.event.addListener(map,'zoom_changed',function() {
+				 alert("1234");
+
+			    });*/
+			 
+			//
+			     /* qq.maps.event.addListener(map, 'click', function() {
+				 		
+				 		//alert("123");
+				    });*/
+							    
+			    qq.maps.event.addListener(map,'bounds_changed',function() {
+			    	ZENG.msgbox._hide();
+			    	var bounds = map.getBounds();
+			    	var northEastLat= bounds.getNorthEast().getLat().toFixed(5);
+			    	var northEastLng= bounds.getNorthEast().getLng().toFixed(5);
+			    	if(Math.abs(beforeNorthEastLat-northEastLat)>0.0025
+			    			||Math.abs(beforeNorthEastLng-northEastLng)>0.0025) {
+			    		beforeNorthEastLat=northEastLat;
+			    		beforeNorthEastLng=northEastLng; 
+			    		fnSpotsList(  );
+			    	}  
+			     }); 
+			 
+		});
+		
+		function showMarker(map, icon, location, psname, psaddress, pscontact) {
+			
+			   var marker = new qq.maps.Marker({
+				  icon: icon, 
+				  position: location ,
+			      map: map
+			    });
+
+			    var info = new qq.maps.InfoWindow({
+			        map: map
+			    });
+                var html='';
+                
+			    qq.maps.event.addListener(marker, 'click', function() {
+			    	clearInfoWin(); 
+			    	info.open(); 
+			    	html='<div style="text-align:left; white-space:nowrap; margin:1px;">' +  psname +'<br>'+psaddress+ '<br>';
+			    	html+='<a href="tel:'+pscontact+'"><img src="${CONTEXT_PATH}/resources/image/policespot/call.png" width="12px" height="12px">&nbsp&nbsp'+pscontact+"</a>";
+			    	html+='</div>';
+			    	//<img src="'+imgPath+'">
+			        info.setContent(html);
+			        info.setPosition(marker); 
+			    });
+			
+			
+			 
+			
+			markersArray.push(marker);
+			infoWinArray.push(info);
+		}
+		
+		function clearMarker() {
+			if (markersArray) {
+		        for (i in markersArray) {
+		            markersArray[i].setMap(null);
+		        }
+		    }
+			if (infoWinArray) {
+		        for (i in infoWinArray) {
+		        	
+		        	 
+		        	infoWinArray[i].setMap(null);
+		        }
+		    }
+			 markersArray = [];
+			 infoWinArray = [];
+			 
+		}
+		
+		function clearInfoWin() {
+			if (infoWinArray) {
+		        for (i in infoWinArray) {
+		        	
+		        	 
+		        	infoWinArray[i].close();
+		        }
+		    }
+		}
+		/******************************************/
+$(function() { 
+	
+	// fnSpotsList("电子警察", "");
+});
+ 
+
+function fnSpotsList( ) { 
+	 clearMarker();  
+	 var bounds = map.getBounds();
+	 
+	 if(bounds==null)
+		  return;
+	 
+	 $.ajax({
+   		url : "${CONTEXT_PATH}/policespot/spots",
+   		async : true,
+   		data : { 
+   			bigLat: bounds.getNorthEast().getLat().toFixed(5),
+   			smallLat: bounds.getSouthWest().getLat().toFixed(5),
+   			bigLng: bounds.getNorthEast().getLng().toFixed(5),
+   			smallLng: bounds.getSouthWest().getLng().toFixed(5)
+   		},
+   		dataType : "json",
+   		type : "post",
+   		success : function(data) { 
+   			if (data.code == 0) {
+   				// 标记
+   				var anchor = new qq.maps.Point(0, 20);
+   		        size = new qq.maps.Size(40, 40); 
+   		        var origin = new qq.maps.Point(0, 0);
+   		        var iconPath="${CONTEXT_PATH}/resources/image/policespot/spot.png";
+   				var policeSpotDto;
+   				var icon; 
+   				icon=new qq.maps.MarkerImage(iconPath  ,  size, 
+	    		            origin,
+	    		            anchor); 
+   				 $(data.policeSpotDtoList).each(function(ind){ 
+   					policeSpotDto=data.policeSpotDtoList[ind];
+   					 
+   						 //monitor.direction
+   						 
+   					     showMarker(map, icon, 
+   					    		   new qq.maps.LatLng(policeSpotDto.latitude, policeSpotDto.longitude), 
+   					    		 policeSpotDto.psname,policeSpotDto.psaddress,policeSpotDto.pscontact );
+   				    
+   					
+   					
+                       
+         		    }); 
+   			}
+   		},
+   		error : function(data) {
+   			alert("error 后台出现错误！");
+   		}
+   	}); 
+}
+ </script>
+</head>
+   <body>
+<!--  class="header FixedTop"  --> 
+	<div id="page"> 
+		<div id="container" > 
+		</div>  
+	</div> 
+	</body>
+</html>

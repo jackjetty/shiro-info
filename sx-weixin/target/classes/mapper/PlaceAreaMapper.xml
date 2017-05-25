@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sx.weixin.dao.PlaceAreaMapper" >
+  <resultMap id="BaseResultMap" type="com.sx.weixin.model.PlaceAreaModel" >
+    <id column="infoId" property="infoid" jdbcType="INTEGER" />
+    <result column="placeId" property="placeid" jdbcType="INTEGER" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    infoId, placeId, latitude, longitude
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Tb_PlaceArea
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Tb_PlaceArea
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sx.weixin.model.PlaceAreaModel" >
+    insert into Tb_PlaceArea (infoId, placeId, latitude, 
+      longitude)
+    values (#{infoid,jdbcType=INTEGER}, #{placeid,jdbcType=INTEGER}, #{latitude,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sx.weixin.model.PlaceAreaModel" >
+    insert into Tb_PlaceArea
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="infoid != null" >
+        infoId,
+      </if>
+      <if test="placeid != null" >
+        placeId,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="infoid != null" >
+        #{infoid,jdbcType=INTEGER},
+      </if>
+      <if test="placeid != null" >
+        #{placeid,jdbcType=INTEGER},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sx.weixin.model.PlaceAreaModel" >
+    update Tb_PlaceArea
+    <set >
+      <if test="placeid != null" >
+        placeId = #{placeid,jdbcType=INTEGER},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sx.weixin.model.PlaceAreaModel" >
+    update Tb_PlaceArea
+    set placeId = #{placeid,jdbcType=INTEGER},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR}
+    where infoId = #{infoid,jdbcType=INTEGER}
+  </update>
+  <!-- 自定义 --> 
+   <select id="selectByPlaceId"   parameterType="java.lang.Integer" resultType="com.sx.weixin.model.PlaceAreaModel">
+    select <include refid="Base_Column_List" />  from Tb_PlaceArea   
+    
+    where 1 = 1
+    <if test="placeid != null  ">
+        and placeId   = #{placeid,jdbcType=INTEGER}
+    </if>
+      order by  infoId asc 
+  </select>
+</mapper>

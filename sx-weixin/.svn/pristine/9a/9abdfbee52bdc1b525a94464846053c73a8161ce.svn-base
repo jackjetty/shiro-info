@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sx.weixin.dao.CarMoveMapper" >
+  <resultMap id="BaseResultMap" type="com.sx.weixin.model.CarMoveModel" >
+    <id column="carMoveId" property="carmoveid" jdbcType="VARCHAR" />
+    <result column="reportOpenId" property="reportopenid" jdbcType="VARCHAR" />
+    <result column="reportTime" property="reporttime" jdbcType="TIMESTAMP" />
+    <result column="reportPhoneNumber" property="reportphonenumber" jdbcType="VARCHAR" />
+    <result column="carType" property="cartype" jdbcType="VARCHAR" />
+    <result column="carNumber" property="carnumber" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="locationX" property="locationx" jdbcType="VARCHAR" />
+    <result column="locationY" property="locationy" jdbcType="VARCHAR" />
+    <result column="carMoveState" property="carmovestate" jdbcType="VARCHAR" />
+    <result column="accepter" property="accepter" jdbcType="VARCHAR" />
+    <result column="acceptTime" property="accepttime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="dealResult" property="dealresult" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    carMoveId, reportOpenId, reportTime, reportPhoneNumber, carType, carNumber, address, 
+    locationX, locationY, carMoveState, accepter, acceptTime, remark, dealResult
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from Tb_CarMove
+    where carMoveId = #{carmoveid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from Tb_CarMove
+    where carMoveId = #{carmoveid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sx.weixin.model.CarMoveModel" >
+    insert into Tb_CarMove (carMoveId, reportOpenId, reportTime, 
+      reportPhoneNumber, carType, carNumber, 
+      address, locationX, locationY, 
+      carMoveState, accepter, acceptTime, 
+      remark, dealResult)
+    values (#{carmoveid,jdbcType=VARCHAR}, #{reportopenid,jdbcType=VARCHAR}, #{reporttime,jdbcType=TIMESTAMP}, 
+      #{reportphonenumber,jdbcType=VARCHAR}, #{cartype,jdbcType=VARCHAR}, #{carnumber,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{locationx,jdbcType=VARCHAR}, #{locationy,jdbcType=VARCHAR}, 
+      #{carmovestate,jdbcType=VARCHAR}, #{accepter,jdbcType=VARCHAR}, #{accepttime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{dealresult,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sx.weixin.model.CarMoveModel" >
+    insert into Tb_CarMove
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="carmoveid != null" >
+        carMoveId,
+      </if>
+      <if test="reportopenid != null" >
+        reportOpenId,
+      </if>
+      <if test="reporttime != null" >
+        reportTime,
+      </if>
+      <if test="reportphonenumber != null" >
+        reportPhoneNumber,
+      </if>
+      <if test="cartype != null" >
+        carType,
+      </if>
+      <if test="carnumber != null" >
+        carNumber,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="locationx != null" >
+        locationX,
+      </if>
+      <if test="locationy != null" >
+        locationY,
+      </if>
+      <if test="carmovestate != null" >
+        carMoveState,
+      </if>
+      <if test="accepter != null" >
+        accepter,
+      </if>
+      <if test="accepttime != null" >
+        acceptTime,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="dealresult != null" >
+        dealResult,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="carmoveid != null" >
+        #{carmoveid,jdbcType=VARCHAR},
+      </if>
+      <if test="reportopenid != null" >
+        #{reportopenid,jdbcType=VARCHAR},
+      </if>
+      <if test="reporttime != null" >
+        #{reporttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reportphonenumber != null" >
+        #{reportphonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="cartype != null" >
+        #{cartype,jdbcType=VARCHAR},
+      </if>
+      <if test="carnumber != null" >
+        #{carnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="locationx != null" >
+        #{locationx,jdbcType=VARCHAR},
+      </if>
+      <if test="locationy != null" >
+        #{locationy,jdbcType=VARCHAR},
+      </if>
+      <if test="carmovestate != null" >
+        #{carmovestate,jdbcType=VARCHAR},
+      </if>
+      <if test="accepter != null" >
+        #{accepter,jdbcType=VARCHAR},
+      </if>
+      <if test="accepttime != null" >
+        #{accepttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="dealresult != null" >
+        #{dealresult,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sx.weixin.model.CarMoveModel" >
+    update Tb_CarMove
+    <set >
+      <if test="reportopenid != null" >
+        reportOpenId = #{reportopenid,jdbcType=VARCHAR},
+      </if>
+      <if test="reporttime != null" >
+        reportTime = #{reporttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reportphonenumber != null" >
+        reportPhoneNumber = #{reportphonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="cartype != null" >
+        carType = #{cartype,jdbcType=VARCHAR},
+      </if>
+      <if test="carnumber != null" >
+        carNumber = #{carnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="locationx != null" >
+        locationX = #{locationx,jdbcType=VARCHAR},
+      </if>
+      <if test="locationy != null" >
+        locationY = #{locationy,jdbcType=VARCHAR},
+      </if>
+      <if test="carmovestate != null" >
+        carMoveState = #{carmovestate,jdbcType=VARCHAR},
+      </if>
+      <if test="accepter != null" >
+        accepter = #{accepter,jdbcType=VARCHAR},
+      </if>
+      <if test="accepttime != null" >
+        acceptTime = #{accepttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="dealresult != null" >
+        dealResult = #{dealresult,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where carMoveId = #{carmoveid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sx.weixin.model.CarMoveModel" >
+    update Tb_CarMove
+    set reportOpenId = #{reportopenid,jdbcType=VARCHAR},
+      reportTime = #{reporttime,jdbcType=TIMESTAMP},
+      reportPhoneNumber = #{reportphonenumber,jdbcType=VARCHAR},
+      carType = #{cartype,jdbcType=VARCHAR},
+      carNumber = #{carnumber,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      locationX = #{locationx,jdbcType=VARCHAR},
+      locationY = #{locationy,jdbcType=VARCHAR},
+      carMoveState = #{carmovestate,jdbcType=VARCHAR},
+      accepter = #{accepter,jdbcType=VARCHAR},
+      acceptTime = #{accepttime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      dealResult = #{dealresult,jdbcType=VARCHAR}
+    where carMoveId = #{carmoveid,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 自定义 -->
+  
+  <select id="maxCarMoveId"    resultType="java.lang.String">
+    select max(carMoveId)  from Tb_CarMove   
+    
+    where 1 = 1
+    
+    <if test="reporttime != null  ">
+        and reportTime  &gt;= #{reporttime,jdbcType=TIMESTAMP}
+    </if>
+     
+     
+  </select>
+  
+  <select id="queryLateCount"    resultType="java.lang.Integer">
+    select count(*)  from Tb_CarMove   
+    
+    where 1 = 1
+    <if test="reporttime != null  ">
+        and reportTime  &gt;= #{reporttime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="cartype != null  ">
+        and carType   = #{cartype,jdbcType=VARCHAR}
+    </if>
+     <if test="carnumber != null  ">
+        and carNumber   = #{carnumber,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+   
+   
+  
+</mapper>

@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" /> 
+	<title>地址转换</title>  
+	<link type="text/css" rel="stylesheet" href="${CONTEXT_PATH}/resources/js/tencent/css/style.css" />    
+	<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/jquery.min.js"></script> 
+	<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/tencent/msgbox.js"></script>
+	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=QV5BZ-OLTHG-NKMQF-I4KIQ-7A356-HVFQM"></script>
+	<script type="text/javascript" charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=QV5BZ-OLTHG-NKMQF-I4KIQ-7A356-HVFQM&libraries=convertor"></script>
+	<script type="text/javascript">
+		$(function() {
+			ZENG.msgbox.show("加载中...", 6);
+		}); 
+		var map ;
+	 
+		$(function() {
+			$("#container").css("height", $(window).height()  );
+			$("#container").css("width", $(window).width()); 
+			//30.00325, 120.5800953
+			var center = new qq.maps.LatLng(29.991175, 120.555496);
+			map = new qq.maps.Map(document.getElementById('container'), {
+		        center: center,
+		        zoomControl: true,
+		        zoom:17 
+		    });
+			   
+			var marker = new qq.maps.Marker({
+		        position: center,
+		        draggable: true,
+		        map: map
+		  });
+			   qq.maps.event.addListener(map,'mousemove',function(event) {
+				   
+				   
+			    });
+			 /* qq.maps.event.addListener(map,'zoom_changed',function() {
+				 alert("1234");
+
+			    });*/
+			 
+			//
+			     /* qq.maps.event.addListener(map, 'click', function() {
+				 		
+				 		//alert("123");
+				    });*/
+							    
+			   fnUnTransSpot();
+			 
+		});
+		
+		function  fnUnTransSpot(){
+			
+			 $.ajax({
+			   		url : "${CONTEXT_PATH}/monitor/untransspots",
+			   		async : true,
+			   		data : {  
+			   		},
+			   		dataType : "json",
+			   		type : "post",
+			   		success : function(data) { 
+			   			if (data.code == 0) {
+			   				// 标记
+			   			 
+			   				var monitorDto;
+			   				 
+			   				 $(data.monitorDtoList).each(function(ind){ 
+			   					monitorDto=data.monitorDtoList[ind];
+			   					 
+			   						  
+			   					 var tran = new Tran(monitorDto.monitorid,new qq.maps.LatLng(monitorDto.latitude, monitorDto.longitude)); 
+			   					  
+			   					 
+			   					//console.log("123");
+			   					  tran.goTrans();
+			   					 //fnTrans(monitorDto.monitorid,   new qq.maps.LatLng(monitorDto.latitude, monitorDto.longitude)  );
+			   				    
+			   					
+			   					
+			   					
+			   					
+			                       
+			         		    }); 
+			   			}
+			   		},
+			   		error : function(data) {
+			   			alert("error 后台出现错误！");
+			   		}
+			   	}); 
+			
+			
+			
+		}
+		
+		 
+		
+		function Tran(monitorid,mappoint){
+			  this.monitorid =monitorid;
+			  this.mappoint=mappoint;
+			  this.goTrans = function () { 
+				    var points = []; //路径的经纬坐标集合
+					 
+		            points.push(mappoint);
+					
+					
+					qq.maps.convertor.translate(
+							points, 2, function 
+							(res) { 
+								
+								$.ajax({
+							   		url : "${CONTEXT_PATH}/monitor/trans",
+							   		async : false,
+							   		data : { 
+							   			monitorid: monitorid,
+							   			lat: res[0].getLat(),
+							   			lng: res[0].getLng()
+							   		},
+							   		dataType : "json",
+							   		type : "post",
+							   		success : function(data) { 
+							   			 
+							   		},
+							   		error : function(data) {
+							   			alert("error 后台出现错误！");
+							   		}
+							   	}); 
+								
+								
+								// alert(res[0]);
+							//marker.setPosition(res[0]);
+							
+							}); 
+			  };
+		 }
+		
+		
+		function fnTrans(monitorid ,mappoint){
+			var points = []; //路径的经纬坐标集合
+			 
+            points.push(mappoint);
+			
+			
+			qq.maps.convertor.translate(
+					points, 2, function 
+					(res) { 
+						
+						$.ajax({
+					   		url : "${CONTEXT_PATH}/monitor/trans",
+					   		async : false,
+					   		data : { 
+					   			monitorid: monitorid,
+					   			lat: res[0].getLat(),
+					   			lng: res[0].getLng()
+					   		},
+					   		dataType : "json",
+					   		type : "post",
+					   		success : function(data) { 
+					   			 
+					   		},
+					   		error : function(data) {
+					   			alert("error 后台出现错误！");
+					   		}
+					   	}); 
+						
+						
+						// alert(res[0]);
+					//marker.setPosition(res[0]);
+					
+					}); 
+		}
+ 
+
+ 
+ </script>
+</head>
+   <body>
+<!--  class="header FixedTop"  --> 
+	<div id="page"> 
+		<div id="container" > 
+		</div>  
+	</div> 
+	</body>
+</html>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sx.weixin.dao.InfoPicMapper" >
+  <resultMap id="BaseResultMap" type="com.sx.weixin.model.InfoPicModel" >
+    <id column="processId" property="processid" jdbcType="VARCHAR" />
+    <id column="recordNo" property="recordno" jdbcType="VARCHAR" />
+    <id column="picIndex" property="picindex" jdbcType="INTEGER" />
+    <result column="picType" property="pictype" jdbcType="VARCHAR" />
+    <result column="picInfo" property="picinfo" jdbcType="VARCHAR" />
+    <result column="picUrl" property="picurl" jdbcType="VARCHAR" />
+    <result column="picLocalStore" property="piclocalstore" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    processId, recordNo, picIndex, picType, picInfo, picUrl, picLocalStore
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.sx.weixin.model.InfoPicModelKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from Tb_InfoPic
+    where processId = #{processid,jdbcType=VARCHAR}
+      and recordNo = #{recordno,jdbcType=VARCHAR}
+      and picIndex = #{picindex,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.sx.weixin.model.InfoPicModelKey" >
+    delete from Tb_InfoPic
+    where processId = #{processid,jdbcType=VARCHAR}
+      and recordNo = #{recordno,jdbcType=VARCHAR}
+      and picIndex = #{picindex,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sx.weixin.model.InfoPicModel" >
+    insert into Tb_InfoPic (processId, recordNo, picIndex, 
+      picType, picInfo, picUrl, 
+      picLocalStore)
+    values (#{processid,jdbcType=VARCHAR}, #{recordno,jdbcType=VARCHAR}, #{picindex,jdbcType=INTEGER}, 
+      #{pictype,jdbcType=VARCHAR}, #{picinfo,jdbcType=VARCHAR}, #{picurl,jdbcType=VARCHAR}, 
+      #{piclocalstore,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sx.weixin.model.InfoPicModel" >
+    insert into Tb_InfoPic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="processid != null" >
+        processId,
+      </if>
+      <if test="recordno != null" >
+        recordNo,
+      </if>
+      <if test="picindex != null" >
+        picIndex,
+      </if>
+      <if test="pictype != null" >
+        picType,
+      </if>
+      <if test="picinfo != null" >
+        picInfo,
+      </if>
+      <if test="picurl != null" >
+        picUrl,
+      </if>
+      <if test="piclocalstore != null" >
+        picLocalStore,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="processid != null" >
+        #{processid,jdbcType=VARCHAR},
+      </if>
+      <if test="recordno != null" >
+        #{recordno,jdbcType=VARCHAR},
+      </if>
+      <if test="picindex != null" >
+        #{picindex,jdbcType=INTEGER},
+      </if>
+      <if test="pictype != null" >
+        #{pictype,jdbcType=VARCHAR},
+      </if>
+      <if test="picinfo != null" >
+        #{picinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="picurl != null" >
+        #{picurl,jdbcType=VARCHAR},
+      </if>
+      <if test="piclocalstore != null" >
+        #{piclocalstore,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sx.weixin.model.InfoPicModel" >
+    update Tb_InfoPic
+    <set >
+      <if test="pictype != null" >
+        picType = #{pictype,jdbcType=VARCHAR},
+      </if>
+      <if test="picinfo != null" >
+        picInfo = #{picinfo,jdbcType=VARCHAR},
+      </if>
+      <if test="picurl != null" >
+        picUrl = #{picurl,jdbcType=VARCHAR},
+      </if>
+      <if test="piclocalstore != null" >
+        picLocalStore = #{piclocalstore,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where processId = #{processid,jdbcType=VARCHAR}
+      and recordNo = #{recordno,jdbcType=VARCHAR}
+      and picIndex = #{picindex,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sx.weixin.model.InfoPicModel" >
+    update Tb_InfoPic
+    set picType = #{pictype,jdbcType=VARCHAR},
+      picInfo = #{picinfo,jdbcType=VARCHAR},
+      picUrl = #{picurl,jdbcType=VARCHAR},
+      picLocalStore = #{piclocalstore,jdbcType=VARCHAR}
+    where processId = #{processid,jdbcType=VARCHAR}
+      and recordNo = #{recordno,jdbcType=VARCHAR}
+      and picIndex = #{picindex,jdbcType=INTEGER}
+  </update>
+</mapper>

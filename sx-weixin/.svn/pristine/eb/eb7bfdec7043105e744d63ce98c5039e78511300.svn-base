@@ -1,0 +1,348 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>  
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>故障上报</title> 
+<link href="${CONTEXT_PATH}/resources/css/sweet-alert.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/weui.css"  type="text/css" />
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/add.css"  type="text/css" />
+<link href="${CONTEXT_PATH}/resources/css/hitch/capture.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/jquery.min.js"></script> 
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> 
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/sweet-alert.min.js"></script> 
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=QV5BZ-OLTHG-NKMQF-I4KIQ-7A356-HVFQM"></script>
+</head>
+<script type="text/javascript"> 
+	wx.config({
+	    debug: false,
+	    appId: "${WxAppId}", // 必填，公众号的唯一标识
+	    timestamp:"${WxTimestamp}", // 必填，生成签名的时间戳
+	    nonceStr: "${WxNoncestr}", // 必填，生成签名的随机串
+	    signature: "${WxSignature}",// 必填，签名，见附录1
+	    jsApiList: [ 
+	      'closeWindow',
+	      'scanQRCode',
+	      'hideOptionMenu',
+	      'chooseImage',
+	      'uploadImage',
+	      "getLocation"
+	    ]
+	}); 
+ 
+	
+	
+	wx.ready(function(){
+	     wx.getLocation({
+		    type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+		    success: function (res) {
+		    	// 纬度，浮点数，范围为90 ~ -90
+		    	$("form input[name=locationx]").val(res.latitude);
+		    	// 经度，浮点数，范围为180 ~ -180。
+		    	$("form input[name=locationy]").val(res.longitude);
+		    	 
+		        var speed = res.speed; // 速度，以米/每秒计
+		        var accuracy = res.accuracy; // 位置精度
+		        
+		        fnPanLoc(res.latitude,res.longitude);
+		         
+		    },
+		    error: function (res) {
+		    	alert("地理位置获取失败"); 
+	           	return false;
+		    }
+		 });
+	   
+	});
+</script>
+<body>
+<div class="page">
+ <form method="post"   >
+        <div class="weui-cells__title">本人信息</div>
+        <div class="weui-cells weui-cells_form">
+             
+               <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label"><label class="weui-label">手机号码</label></label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="tel"  name="phonenumber"   placeholder="请输入手机号">
+                </div>
+               </div>   
+             
+        </div> 
+        <div class="weui-cells__title">位置信息</div>
+        
+        
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text"  name="address" placeholder="请输入故障发生位置"/>
+                </div>
+            </div>
+        </div>
+        
+        
+          
+         <input type="hidden" name="locationx" value="" />
+         <input type="hidden" name="locationy" value="" />
+        
+         <div class="page-map" id="map-container">
+         </div>
+        
+        <div>
+	        <div class="weui-cells__title">现场照片</div>
+	        <div class="weui-cells">
+	            <div class="weui-cell">
+	                <div class="weui-cell__bd">
+	                    <div class="weui-uploader">
+	                        
+	                        <div class="weui-uploader__bd">
+	                            <ul class="weui-uploader__files" id="uploaderFiles">
+	                                 
+	                            </ul>
+	                            <div class="weui-uploader__input-box">
+	                                <div id="uploaderInput" class="weui-uploader__input"   />
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+            
+        </div> 
+        </div>
+       <div class="weui-cells__title" >故障描述</div> 
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea name="hitchdes" class="weui-textarea"  placeholder="请输入故障描述信息" rows="3"></textarea>
+                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                </div>
+            </div>
+        </div> 
+        <div class="weui-btn-area">
+	            <a class="weui-btn weui-btn_primary" href="javascript:fnSubmit();" id="showTooltips">确定</a>
+	    </div>
+       
+ </form>
+</div>
+
+          
+ <div class="page__ft">
+   <h3>【适用范围】</h3>
+        <p>  仅用于绍兴市范围内停放的绍兴牌照的车辆影响交通，车主不在现场，也没留联系方式的情况。</p>
+ </div>
+</body>
+</html>
+<script type="text/javascript">
+   var map;
+   function  fnPanLoc(lat,lng){
+	   map.panTo(new qq.maps.LatLng(lat,lng));
+	   fnMapAddress(center.getLat(),center.getLng());
+	   
+   }
+   
+   
+  
+   
+   
+   
+   $(function() {
+		 
+		
+		var center = new qq.maps.LatLng(30.00325, 120.5800953);
+		var beforeNorthEastLat=0;
+		var beforeNorthEastLng=0; 
+		map = new qq.maps.Map(document.getElementById('map-container'), {
+	        center: center,
+	        zoomControl: true, 
+	        zoom:17 
+	    });
+		
+		
+		 var marker = new qq.maps.Marker({
+		        position: center,
+		        draggable: true,
+		        map: map
+		  });
+		
+		 var position;
+		 qq.maps.event.addListener(map,'bounds_changed',function() {
+		    	 
+		    	var bounds = map.getBounds();
+		    	var northEastLat= bounds.getNorthEast().getLat().toFixed(5);
+		    	var northEastLng= bounds.getNorthEast().getLng().toFixed(5);
+		    	if(Math.abs(beforeNorthEastLat-northEastLat)>0.0010
+		    			||Math.abs(beforeNorthEastLng-northEastLng)>0.0010) {
+		    		beforeNorthEastLat=northEastLat;
+		    		beforeNorthEastLng=northEastLng;
+		    		position =  bounds.getCenter()
+		    		fnMapAddress(position.getLat(),position.getLng());
+		    		marker.setPosition(position);
+		    		marker.setDraggable(true); 
+		    		
+		    	}  
+		     }); 
+		//设置Marker停止拖动事件
+		
+        qq.maps.event.addListener(marker, 'dragend', function() {
+             
+            //getPosition()  返回Marker的位置
+            position=marker.getPosition();
+            $('input[name="locationx"]').val(position.getLat());
+            $('input[name="locationy"]').val(position.getLng());
+            fnMapAddress(position.getLat(),position.getLng());
+             //
+        });
+   });
+  
+   
+   
+   function fnMapAddress(lat,lng){
+		$.ajax({
+			url : "${CONTEXT_PATH}/map/query_address",
+			dataType : "json",
+			type : "post",
+			data : {
+				lat : lat,
+				lng : lng
+			},
+			success : function(data) { 
+				if(data.code==0){ 
+			    	$('input[name="address"]').val(data.address);
+					 
+				}else{
+					alert(data.info);
+				}
+			}
+		});
+		
+	}
+
+
+</script>
+<script type="text/javascript">
+$("#uploaderFiles").on("click",".clear", function() {
+	$(this).parent().remove(); 
+});
+ 
+ 
+   $(".weui-uploader__input-box").click(function(){
+	    
+	   wx.chooseImage({
+		    count: 1, // 默认9
+		    sizeType: [ 'compressed','compressed'], // 可以指定是原图还是压缩图，默认二者都有
+		    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+		    success: function (res) {
+		    	var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+	            //上传图片接口
+	            wx.uploadImage({
+	                localId: localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+	                isShowProgressTips: 1, // 默认为1，显示进度提示
+	                success: function (res) {
+	                    var serverId = res.serverId; // 返回图片的服务器端ID
+	                    
+	                    fnDownMediaMore( serverId );
+	                    
+	                }
+	            });
+		    }
+		});
+	   
+   });
+   
+   
+   
+   function fnDownMediaMore(mediaId ){
+		
+		 
+		$.ajax({
+			url : "${CONTEXT_PATH}/download_media",
+			dataType : "json",
+			type : "post",
+			data : {
+				mediaId : mediaId  
+			},
+			success : function(data) { 
+				if(data.code==0){ 
+					
+					
+					var html='';
+					html+='<li class="weui-uploader__file" style="position: relative; background-image:url('+data.mediaUrl+')">';
+					html+='         <div    class="clear">';
+					html+='              <img  src="${CONTEXT_PATH}/resources/image/icon/delete.png"  alt="删除"/> ';
+					html+='        </div>';
+					html+='        <input type="hidden" name="morepath" value="'+data.mediaPath+'" />'; 
+					html+='</li>'; 
+					      
+				    $("#uploaderFiles").append($(html));  
+				       
+				        
+					 
+				}
+			}
+		});
+	}
+
+
+   function fnSubmit(){
+		
+		var phonenumber=$.trim($('input[name=phonenumber]').val());
+		
+		var address=$.trim($('input[name=address]').val());
+		var locationx=$.trim($('input[name=locationx]').val());
+		var locationy=$.trim($('input[name=locationy]').val());
+		
+		var hitchdes=$.trim($("form textarea[name=hitchdes]").val());
+		
+		if(phonenumber.length!=11){
+			swal("信息不完整", "请输入正确的手机号码!","error");
+			return false;
+		}
+		if(address.length<1){
+			swal("信息不完整","位置信息无法获取!","error");
+			return false;
+		}
+		if(locationx.length<1){
+			swal("信息不完整","位置信息无法获取!","error");
+			return false;
+		}
+		if($('input[name=morepath]').length<1){
+			swal("信息不完整","请上传图片信息!","error");
+			return false;
+		}
+		
+		 
+		
+		
+		$.ajax({
+			url : "${CONTEXT_PATH}/hitch/gain",
+			data : $("form").serialize(),
+			dataType : "json",
+			async : false,
+			type : "post",
+			success:function(data){
+				if(data.code==0){
+					//window.location.href="${CONTEXT_PATH}/accident/capture"; 
+					//alert(data.info);
+					 swal({   title: "谢谢!",   text: data.info,   type: "info",   
+	        		 showCancelButton: false,   closeOnConfirm: false  }, 
+	        			 function(){  history.go(-1);});
+					//wx.closeWindow();
+				}else{
+					swal("出错", data.info, "error"); 
+				}
+			},
+			error:function(){
+				swal("网络繁忙！"); 
+			}
+		});
+	}
+</script>
+
+

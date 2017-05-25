@@ -1,0 +1,77 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	padding:0;
+	margin:0;
+}
+a{
+	text-decoration:none;
+}
+li{
+	list-style:none;
+}
+body{
+	background-color:#EBEEEF;
+}
+.page{
+	background-color:#EBEEEF;
+}
+.page .container{
+	
+}
+
+.container .List{
+	padding:0 15px;
+}
+.container .List .box{
+	overflow:hidden;
+	display:block;
+	margin:10px 0;
+	padding:12px;
+	border:1px solid #EAEAEA;
+	border-radius:8px;
+	-o-border-radius:8px;
+	-moz-border-radius:8px;
+	-ms-border-radius:8px;
+	-webkit-border-radius:8px;
+	background-color:white;
+	position:relative;
+
+}
+.container  .List  .picture{
+	float:right;
+	position:absolute; right: 12px;  
+ 
+	width:100px;
+	height:100px;
+	display:block;
+}
+.container  .List  .text{
+	float:left; 
+	margin-right: 104px;
+	display:inline;
+	height:104px;
+}
+.container  .List  .title{
+	height:78px;
+	color:#000000;
+	line-height:26px;
+	font-size:16px;
+	font-family:'微软雅黑';
+	width:100%;
+	overflow-y:hidden;
+	display:block;
+}
+.container  .List  .time{
+	height:78px;
+	color:#9E9E9E;
+	line-height:26px;
+	font-size:14px;
+	font-family:'Arial';
+}
+.container  .List  .text1{
+	width:100%;
+	height:104px;
+}
+
+

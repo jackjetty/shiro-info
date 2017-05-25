@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>  
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>意见建议</title> 
+<link href="${CONTEXT_PATH}/resources/css/feedback/report.css" rel="stylesheet" type="text/css">
+<link href="${CONTEXT_PATH}/resources/css/sweet-alert.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/weui.css"  type="text/css" />
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/add.css?tt=2"  type="text/css" />
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/jquery.min.js"></script> 
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/sweet-alert.min.js"></script> 
+</head>
+<div class="page">
+ <form method="post"   >
+        <div class="weui-cells__title">必填＊</div> 
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" name="feedtext" placeholder="请填写您对交管工作的意见建议" rows="5"></textarea>
+                    <div class="weui-textarea-counter">500</div>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells__title">选填</div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input class="weui-input" name="contact" type="text" placeholder="请填写您联系方式"/>
+                </div>
+            </div>
+        </div>
+        
+         <div class="weui-btn-area">
+            <a class="weui-btn weui-btn_primary" href="javascript:fnSubmit();" id="showTooltips">确定</a>
+        </div>
+    
+ </form>
+</div>
+</html>
+<script type="text/javascript">
+function fnSubmit(){
+	 var feedtext=$.trim($("form textarea[name=feedtext]").val());
+	 var contact=$.trim($("form input[name=contact]").val());
+	 if(feedtext==""){
+		    swal("请填写意见建议!");
+			return false;
+	 }
+	 
+	 $.ajax({
+		    url:"${CONTEXT_PATH}/feedback/gain",
+		    type:'POST', //GET
+		    async:true,    //或false,是否异步
+		    data : $("form").serialize(),
+		    timeout:5000,    //超时时间
+		    dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text 
+		    success:function(data,textStatus,jqXHR){ 
+		         if(data.code!=0){
+		        	 swal("出错", data.info,"error"); 
+		         }else{
+		        	 
+		        	 swal({   title: "谢谢!",   text: data.info,   type: "info",   
+		        		 showCancelButton: false,   closeOnConfirm: false  }, 
+		        			 function(){  history.go(-1);});
+		        	 
+		        	 
+		         } 
+		    },
+		    error:function(xhr,textStatus){
+		     
+		    	swal("网络繁忙！");
+		    } 
+		});
+}
+
+  
+</script>

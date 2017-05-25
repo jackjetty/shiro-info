@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sx.weixin.dao.PoliceSpotMapper"> 
+  <resultMap id="BaseResultMap" type="com.sx.weixin.model.PoliceSpotModel">
+    <id column="psId" jdbcType="INTEGER" property="psid" />
+    <result column="psName" jdbcType="VARCHAR" property="psname" />
+    <result column="psContact" jdbcType="VARCHAR" property="pscontact" />
+    <result column="psAddress" jdbcType="VARCHAR" property="psaddress" />
+    <result column="psType" jdbcType="VARCHAR" property="pstype" />
+    <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    <result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    psId, psName, psContact, psAddress, psType, longitude, latitude, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from Tb_PoliceSpot
+    where psId = #{psid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from Tb_PoliceSpot
+    where psId = #{psid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sx.weixin.model.PoliceSpotModel">
+    insert into Tb_PoliceSpot (psId, psName, psContact, 
+      psAddress, psType, longitude, 
+      latitude, remark)
+    values (#{psid,jdbcType=INTEGER}, #{psname,jdbcType=VARCHAR}, #{pscontact,jdbcType=VARCHAR}, 
+      #{psaddress,jdbcType=VARCHAR}, #{pstype,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
+      #{latitude,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sx.weixin.model.PoliceSpotModel">
+    insert into Tb_PoliceSpot
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="psid != null">
+        psId,
+      </if>
+      <if test="psname != null">
+        psName,
+      </if>
+      <if test="pscontact != null">
+        psContact,
+      </if>
+      <if test="psaddress != null">
+        psAddress,
+      </if>
+      <if test="pstype != null">
+        psType,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="psid != null">
+        #{psid,jdbcType=INTEGER},
+      </if>
+      <if test="psname != null">
+        #{psname,jdbcType=VARCHAR},
+      </if>
+      <if test="pscontact != null">
+        #{pscontact,jdbcType=VARCHAR},
+      </if>
+      <if test="psaddress != null">
+        #{psaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="pstype != null">
+        #{pstype,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sx.weixin.model.PoliceSpotModel">
+    update Tb_PoliceSpot
+    <set>
+      <if test="psname != null">
+        psName = #{psname,jdbcType=VARCHAR},
+      </if>
+      <if test="pscontact != null">
+        psContact = #{pscontact,jdbcType=VARCHAR},
+      </if>
+      <if test="psaddress != null">
+        psAddress = #{psaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="pstype != null">
+        psType = #{pstype,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where psId = #{psid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sx.weixin.model.PoliceSpotModel">
+    update Tb_PoliceSpot
+    set psName = #{psname,jdbcType=VARCHAR},
+      psContact = #{pscontact,jdbcType=VARCHAR},
+      psAddress = #{psaddress,jdbcType=VARCHAR},
+      psType = #{pstype,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where psId = #{psid,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  <!-- 自定义--> 
+  <select id="selectScopeSpots" resultType="com.sx.weixin.model.PoliceSpotModel">
+    select <include refid="Base_Column_List" /> from Tb_PoliceSpot   
+    
+    where 1 = 1
+    <if test="smalllat != null  ">
+        and cast(latitude as float)  &gt; #{smalllat,jdbcType=REAL}
+    </if>
+    <if test="biglat != null  ">
+        and cast(latitude as float)  &lt; #{biglat,jdbcType=REAL}
+    </if>
+    <if test="smalllng != null  ">
+        and cast(longitude as float)  &gt; #{smalllng,jdbcType=REAL}
+    </if>
+    <if test="biglng != null  ">
+        and cast(longitude as float)  &lt; #{biglng,jdbcType=REAL}
+    </if> 
+    
+    <!--  &lt;        < 
+         &gt;          >     
+         &gt;          >  
+    &lt;&gt;   <>
+    &amp;      & 
+    &apos;      '
+    &quot;      "
+      -->
+  </select>
+</mapper>

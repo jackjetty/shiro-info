@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sx.weixin.dao.MonitorMapper" >
+  <resultMap id="BaseResultMap" type="com.sx.weixin.model.MonitorModel" >
+    <id column="monitorId" property="monitorid" jdbcType="INTEGER" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="direction" property="direction" jdbcType="VARCHAR" />
+    <result column="monitorTypeName" property="monitortypename" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    monitorId, position, longitude, latitude, direction, monitorTypeName
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Tb_Monitor
+    where monitorId = #{monitorid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Tb_Monitor
+    where monitorId = #{monitorid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sx.weixin.model.MonitorModel" >
+    insert into Tb_Monitor (monitorId, position, longitude, 
+      latitude, direction, monitorTypeName
+      )
+    values (#{monitorid,jdbcType=INTEGER}, #{position,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
+      #{latitude,jdbcType=VARCHAR}, #{direction,jdbcType=VARCHAR}, #{monitortypename,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sx.weixin.model.MonitorModel" >
+    insert into Tb_Monitor
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="monitorid != null" >
+        monitorId,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="direction != null" >
+        direction,
+      </if>
+      <if test="monitortypename != null" >
+        monitorTypeName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="monitorid != null" >
+        #{monitorid,jdbcType=INTEGER},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="direction != null" >
+        #{direction,jdbcType=VARCHAR},
+      </if>
+      <if test="monitortypename != null" >
+        #{monitortypename,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sx.weixin.model.MonitorModel" >
+    update Tb_Monitor
+    <set >
+      <if test="position != null" >
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="direction != null" >
+        direction = #{direction,jdbcType=VARCHAR},
+      </if>
+      <if test="monitortypename != null" >
+        monitorTypeName = #{monitortypename,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where monitorId = #{monitorid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sx.weixin.model.MonitorModel" >
+    update Tb_Monitor
+    set position = #{position,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      direction = #{direction,jdbcType=VARCHAR},
+      monitorTypeName = #{monitortypename,jdbcType=VARCHAR}
+    where monitorId = #{monitorid,jdbcType=INTEGER}
+  </update>
+  
+  
+  <!-- 自定义 --> 
+  <select id="selectScopeSpots"   resultType="com.sx.weixin.model.MonitorModel">
+    select <include refid="Base_Column_List" /> from Tb_Monitor   
+    
+    where 1 = 1
+    <if test="smalllat != null  ">
+        and cast(latitude as float)  &gt; #{smalllat,jdbcType=REAL}
+    </if>
+    <if test="biglat != null  ">
+        and cast(latitude as float)  &lt; #{biglat,jdbcType=REAL}
+    </if>
+    <if test="smalllng != null  ">
+        and cast(longitude as float)  &gt; #{smalllng,jdbcType=REAL}
+    </if>
+    <if test="biglng != null  ">
+        and cast(longitude as float)  &lt; #{biglng,jdbcType=REAL}
+    </if>
+    
+    <if test="monitortype != null  ">
+        and monitorTypeName  = #{monitortype,jdbcType=VARCHAR}
+    </if>
+    <if test="position != null  ">
+        and position LIKE  '%'+#{position,jdbcType=VARCHAR}+ '%' 
+    </if> 
+    
+    <!--  &lt;        < 
+         &gt;          >     
+         &gt;          >  
+    &lt;&gt;   <>
+    &amp;      & 
+    &apos;      '
+    &quot;      "
+      -->
+  </select>
+  
+   
+</mapper>

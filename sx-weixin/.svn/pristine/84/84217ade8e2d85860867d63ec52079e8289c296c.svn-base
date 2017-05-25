@@ -1,0 +1,12 @@
+.page.button .page__bd {
+    padding: 0 15px;
+}
+.page__bd_spacing {
+    padding: 0 15px;
+}
+ 
+ .page__ft {
+    padding-top: 40px;
+    padding-bottom: 20px;
+    text-align: center;
+}

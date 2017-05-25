@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sx.weixin.dao.AnnalsMapper" >
+  <resultMap id="BaseResultMap" type="com.sx.weixin.model.AnnalsModel" >
+    <id column="anId" property="anid" jdbcType="VARCHAR" />
+    <result column="anTitle" property="antitle" jdbcType="VARCHAR" />
+    <result column="mediaId" property="mediaid" jdbcType="VARCHAR" />
+    <result column="anUrl" property="anurl" jdbcType="VARCHAR" />
+    <result column="anCreateTime" property="ancreatetime" jdbcType="INTEGER" />
+    <result column="anUpdateTime" property="anupdatetime" jdbcType="INTEGER" />
+    <result column="thumbUrl" property="thumburl" jdbcType="VARCHAR" />
+    <result column="thumbMediaId" property="thumbmediaid" jdbcType="VARCHAR" />
+    <result column="anValid" property="anvalid" jdbcType="BIT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    anId, anTitle, mediaId, anUrl, anCreateTime, anUpdateTime, thumbUrl, thumbMediaId, 
+    anValid, remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from Tb_Annals
+    where anId = #{anid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from Tb_Annals
+    where anId = #{anid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sx.weixin.model.AnnalsModel" >
+    insert into Tb_Annals (anId, anTitle, mediaId, 
+      anUrl, anCreateTime, anUpdateTime, 
+      thumbUrl, thumbMediaId, anValid, 
+      remark)
+    values (#{anid,jdbcType=VARCHAR}, #{antitle,jdbcType=VARCHAR}, #{mediaid,jdbcType=VARCHAR}, 
+      #{anurl,jdbcType=VARCHAR}, #{ancreatetime,jdbcType=INTEGER}, #{anupdatetime,jdbcType=INTEGER}, 
+      #{thumburl,jdbcType=VARCHAR}, #{thumbmediaid,jdbcType=VARCHAR}, #{anvalid,jdbcType=BIT}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sx.weixin.model.AnnalsModel" >
+    insert into Tb_Annals
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="anid != null" >
+        anId,
+      </if>
+      <if test="antitle != null" >
+        anTitle,
+      </if>
+      <if test="mediaid != null" >
+        mediaId,
+      </if>
+      <if test="anurl != null" >
+        anUrl,
+      </if>
+      <if test="ancreatetime != null" >
+        anCreateTime,
+      </if>
+      <if test="anupdatetime != null" >
+        anUpdateTime,
+      </if>
+      <if test="thumburl != null" >
+        thumbUrl,
+      </if>
+      <if test="thumbmediaid != null" >
+        thumbMediaId,
+      </if>
+      <if test="anvalid != null" >
+        anValid,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="anid != null" >
+        #{anid,jdbcType=VARCHAR},
+      </if>
+      <if test="antitle != null" >
+        #{antitle,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaid != null" >
+        #{mediaid,jdbcType=VARCHAR},
+      </if>
+      <if test="anurl != null" >
+        #{anurl,jdbcType=VARCHAR},
+      </if>
+      <if test="ancreatetime != null" >
+        #{ancreatetime,jdbcType=INTEGER},
+      </if>
+      <if test="anupdatetime != null" >
+        #{anupdatetime,jdbcType=INTEGER},
+      </if>
+      <if test="thumburl != null" >
+        #{thumburl,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbmediaid != null" >
+        #{thumbmediaid,jdbcType=VARCHAR},
+      </if>
+      <if test="anvalid != null" >
+        #{anvalid,jdbcType=BIT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sx.weixin.model.AnnalsModel" >
+    update Tb_Annals
+    <set >
+      <if test="antitle != null" >
+        anTitle = #{antitle,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaid != null" >
+        mediaId = #{mediaid,jdbcType=VARCHAR},
+      </if>
+      <if test="anurl != null" >
+        anUrl = #{anurl,jdbcType=VARCHAR},
+      </if>
+      <if test="ancreatetime != null" >
+        anCreateTime = #{ancreatetime,jdbcType=INTEGER},
+      </if>
+      <if test="anupdatetime != null" >
+        anUpdateTime = #{anupdatetime,jdbcType=INTEGER},
+      </if>
+      <if test="thumburl != null" >
+        thumbUrl = #{thumburl,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbmediaid != null" >
+        thumbMediaId = #{thumbmediaid,jdbcType=VARCHAR},
+      </if>
+      <if test="anvalid != null" >
+        anValid = #{anvalid,jdbcType=BIT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where anId = #{anid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sx.weixin.model.AnnalsModel" >
+    update Tb_Annals
+    set anTitle = #{antitle,jdbcType=VARCHAR},
+      mediaId = #{mediaid,jdbcType=VARCHAR},
+      anUrl = #{anurl,jdbcType=VARCHAR},
+      anCreateTime = #{ancreatetime,jdbcType=INTEGER},
+      anUpdateTime = #{anupdatetime,jdbcType=INTEGER},
+      thumbUrl = #{thumburl,jdbcType=VARCHAR},
+      thumbMediaId = #{thumbmediaid,jdbcType=VARCHAR},
+      anValid = #{anvalid,jdbcType=BIT},
+      remark = #{remark,jdbcType=VARCHAR}
+    where anId = #{anid,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 自定义 -->
+  <select id="getValidAnnalsList"   resultType="com.sx.weixin.model.AnnalsModel">
+    select <include refid="Base_Column_List" /> from Tb_Annals   
+    
+    where anValid = 1 
+    <if test="keyword != null  ">
+        and anTitle LIKE  '%'+ #{keyword,jdbcType=VARCHAR}+'%'  
+    </if> 
+    order by anCreateTime desc
+  </select>
+</mapper>

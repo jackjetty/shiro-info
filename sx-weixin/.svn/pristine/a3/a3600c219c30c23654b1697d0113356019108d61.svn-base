@@ -1,0 +1,50 @@
+
+## Rules reminder:
+## DEBUG < INFO < WARN < ERROR < FATAL
+## Global logging configuration
+#log4j.rootLogger=debug,appender1  
+
+#log4j.rootLogger=info,appender1  
+
+log4j.rootLogger=INFO,stdout 
+log4j.logger.com.sx=INFO,appender1,A1 
+
+# \u8F93\u51FA\u5230\u63A7\u5236\u53F0   
+
+### appender.stdout\u8F93\u51FA\u5230\u63A7\u5236\u53F0 ###
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Target=System.out
+log4j.appender.stdout.Threshold =ERROR
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern= [%-5p] %d{yyyy-MM-dd HH:mm:ss}: %-4r [%t] (%l )   - %m%n
+
+# \u6837\u5F0F\u4E3A TTCCLayout  
+
+#
+#
+log4j.appender.appender1 = org.apache.log4j.DailyRollingFileAppender
+log4j.appender.appender1.File =/Users/pg/Documents/tomcat7/logs/sx_wx_error.log
+log4j.appender.appender1.DatePattern='.'yyyy-MM-dd'.log'
+log4j.appender.appender1.Append =true
+log4j.appender.appender1.Threshold =ERROR
+log4j.appender.appender1.layout =org.apache.log4j.PatternLayout
+log4j.appender.appender1.layout.ConversionPattern =[ %p ]  %-d{yyyy-MM-dd HH:mm:ss}  [ %t:%r ] - ( %l )   %m%n
+
+
+#${catalina.home}/logs
+log4j.appender.A1 = org.apache.log4j.DailyRollingFileAppender
+log4j.appender.A1.File =/Users/pg/Documents/tomcat7/logs/sx_wx_info.log
+log4j.appender.A1.DatePattern='.'yyyy-MM-dd'.log'
+log4j.appender.A1.Append =true
+log4j.appender.A1.Threshold =INFO
+log4j.appender.A1.layout =org.apache.log4j.PatternLayout
+log4j.appender.A1.layout.ConversionPattern =[ %p ]  %-d{yyyy-MM-dd HH:mm:ss}  [ %t:%r ] - ( %l)   %m%n
+ 
+  
+
+#log4j.appender.info=org.apache.log4j.ConsoleAppender  
+#log4j.appender.info.layout=org.apache.log4j.TTCCLayout
+#log4j.appender.info.Threshold = INFO
+ 
+ 
+ 

@@ -1,0 +1,81 @@
+package com.sx.weixin.util; 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL; 
+public class HttpUtil{ 
+	
+	 public  String get(String url)   {
+	        StringBuffer bufferRes = new StringBuffer("");  
+	        
+	        InputStream in=null;
+	        BufferedReader read=null;
+	        HttpURLConnection http=null;
+	        try{
+	         
+	        	URL urlGet = new URL(url);
+	            http = (HttpURLConnection) urlGet.openConnection(); 
+	            http.setConnectTimeout(25000);
+	            // 读取超时 --服务器响应比较慢，增大时间
+	            http.setReadTimeout(25000);
+	            http.setRequestMethod("GET");
+	            http.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+	           
+	            http.setDoOutput(true);
+	            http.setDoInput(true);
+	            http.connect();
+	            
+	            in = http.getInputStream();
+	            read = new BufferedReader(new InputStreamReader(in, Constant.DEFAULT_CHARSET));
+	            String valueString = null; 
+	            while ((valueString = read.readLine()) != null){
+	                bufferRes.append(valueString);
+	            }
+	            in.close();
+	    		in=null;
+	    		read.close();
+	            read=null;
+	            if (http != null) {
+	                // 关闭连接  
+	                http.disconnect();
+	                http=null;
+	            } 
+	            return bufferRes.toString();
+	        }catch(Exception ex){
+	        	 ex.printStackTrace();
+	        	  
+	        }
+	        finally{
+	        	if(in!=null){
+	        		try {
+						in.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	        		in=null;
+	        	}
+	        	if(read!=null){
+	        		try {
+						read.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	                read=null;
+	        	}
+	        	if (http != null) {
+	                // 关闭连接  
+	                http.disconnect();
+	               
+	                http=null;
+	                
+	            }
+	        }
+	        return bufferRes.toString();
+	      
+	        
+	    }
+}

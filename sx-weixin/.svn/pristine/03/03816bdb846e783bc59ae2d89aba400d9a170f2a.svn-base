@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>绍兴交警</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link href="${CONTEXT_PATH}/resources/css/serviceicon.css?tt=12" rel="stylesheet" type="text/css">
+<script src="${CONTEXT_PATH}/resources/js/touchslide.1.1.js"></script>
+</head> 
+<body>
+<div  class="page">
+<!--幻灯片开始-->
+    <div id="focus" class="focus">
+        <div class="hd">
+            <ul>
+            </ul>
+        </div>
+        <div class="bd">
+            <ul>
+                <li><a href="#"><img src="${CONTEXT_PATH}/resources/image/ban_mi_1.png"  /></a></li>
+                <li><a href="#"><img src="${CONTEXT_PATH}/resources/image/ban_mi_2.png" /></a></li>
+                <li><a href="#"><img src="${CONTEXT_PATH}/resources/image/ban_mi_3.png" /></a></li>
+                <li><a href="#"><img src="${CONTEXT_PATH}/resources/image/ban_mi_4.png" /></a></li>
+            </ul>
+        </div>
+    </div>
+    <script type="text/javascript">
+        TouchSlide({
+            slideCell : "#focus",
+            titCell : ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+            mainCell : ".bd ul",
+            effect : "left",
+            autoPlay : true,//自动播放
+            autoPage : true, //自动分页
+            switchLoad : "_src" //切换加载，真实图片路径为"_src" 
+        });
+    </script>
+<!--幻灯片结束-->
+<div class="main">
+	<table width="100%" height="225" border="0" cellspacing="2px" cellpadding="0">
+  <tr>
+    <td style="border-right:4px solid #EBEEEF;">
+      <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx1e38704eb0769e8a&redirect_uri=http%3A%2F%2Fwx.sxga.gov.cn%2Fweixin%2Fwx.action%3Ffn%3Dchksub%26deptid%3D88001_318%26res%3Dwyjb&response_type=code&scope=snsapi_base&state=1#wechat_redirect">
+    	<div>
+    	<img src="${CONTEXT_PATH}/resources/image/interactiveicon_1.png">
+        </div>
+    	<h5>有奖举报</h5>
+    	</a>
+    </td>
+    <td style="border-left:2px solid #EBEEEF;border-right:2px solid #EBEEEF;">
+    	<a href="${CONTEXT_PATH}/feedback/report">
+	    	<div>
+	    	<img src="${CONTEXT_PATH}/resources/image/interactiveicon_2.png">
+	        </div>
+	    	<h5>意见建议</h5>
+    	</a>
+    </td>
+    <td style="border-left:4px solid #EBEEEF;">
+      <a href="${CONTEXT_PATH}/articledelict/grid">
+    	<div>
+    	<img src="${CONTEXT_PATH}/resources/image/interactiveicon_3.png">
+        </div>
+    	<h5>违法曝光台</h5>
+       </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="border-right:4px solid #EBEEEF;">
+      <a href="${CONTEXT_PATH}/articletransport/grid">
+    	<div>
+    	<img src="${CONTEXT_PATH}/resources/image/interactiveicon_4.png">
+        </div>
+    	<h5>交管动态</h5>
+      </a>
+    </td>
+    <td style="border-left:2px solid #EBEEEF;border-right:2px solid #EBEEEF;">
+      <a href="${CONTEXT_PATH}/hitch/capture">
+    	<div>
+    	<img src="${CONTEXT_PATH}/resources/image/interactiveicon_5.png">
+        </div>
+    	<h5>设备故障上报</h5>
+      </a>
+    </td>
+    <td style="border-left:4px solid #EBEEEF;">
+       <a href="${CONTEXT_PATH}/policespot/map">
+    	<div>
+    	<img src="${CONTEXT_PATH}/resources/image/serviceicon_10.png">
+        </div>
+    	<h5>警务地图</h5>
+       </a>
+    </td>
+  </tr>
+  <tr>
+   <td style="border-right:4px solid #EBEEEF;">
+       <a href="http://121.40.107.110/zjtraffic/about/lawsRegulations.html">
+    	<div>
+    	<img src="${CONTEXT_PATH}/resources/image/queryicon_12.png">
+        </div>
+    	<h5>法律园地</h5>
+       </a> 
+    </td>
+    <td style="border-left:2px solid #EBEEEF;border-right:2px solid #EBEEEF;">
+        <a href="${CONTEXT_PATH}/annals/info">
+    	<div>
+    	<img src="${CONTEXT_PATH}/resources/image/queryicon_7.png">
+        </div>
+    	<h5>资讯检索</h5>
+    	</a>
+    </td>
+  </tr>
+
+</table>
+    
+</div>
+   <footer>
+    	<div class="copyright">
+            <img src="${CONTEXT_PATH}/resources/image/logo.png" class="logo"/>
+            <span>绍兴市公安局交通警察支队 版权所有</span>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

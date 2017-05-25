@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sx.weixin.dao.FormalAccidentMapper" >
+  <resultMap id="BaseResultMap" type="com.sx.weixin.model.FormalAccidentModel" >
+    <id column="formlAccidentId" property="formlaccidentid" jdbcType="VARCHAR" />
+    <result column="reportOpenId" property="reportopenid" jdbcType="VARCHAR" />
+    <result column="reportTime" property="reporttime" jdbcType="TIMESTAMP" />
+    <result column="reportPhoneNumber" property="reportphonenumber" jdbcType="VARCHAR" />
+    <result column="otherPhoneNumber" property="otherphonenumber" jdbcType="VARCHAR" />
+    <result column="reporterType" property="reportertype" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="locationX" property="locationx" jdbcType="VARCHAR" />
+    <result column="locationY" property="locationy" jdbcType="VARCHAR" />
+    <result column="accidentState" property="accidentstate" jdbcType="VARCHAR" />
+    <result column="acceptTime" property="accepttime" jdbcType="TIMESTAMP" />
+    <result column="accepter" property="accepter" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="departmentId" property="departmentid" jdbcType="VARCHAR" />
+    <result column="emergencyCall" property="emergencycall" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    formlAccidentId, reportOpenId, reportTime, reportPhoneNumber,otherPhoneNumber, reporterType, address, 
+    locationX, locationY, accidentState, acceptTime, accepter, remark, departmentId, 
+    emergencyCall
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from Tb_FormalAccident
+    where formlAccidentId = #{formlaccidentid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from Tb_FormalAccident
+    where formlAccidentId = #{formlaccidentid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sx.weixin.model.FormalAccidentModel" >
+    insert into Tb_FormalAccident (formlAccidentId, reportOpenId, reportTime, 
+      reportPhoneNumber,otherPhoneNumber, reporterType, address, 
+      locationX, locationY, accidentState, 
+      acceptTime, accepter, remark, 
+      departmentId, emergencyCall)
+    values (#{formlaccidentid,jdbcType=VARCHAR}, #{reportopenid,jdbcType=VARCHAR}, #{reporttime,jdbcType=TIMESTAMP}, 
+      #{reportphonenumber,jdbcType=VARCHAR}, #{otherphonenumber,jdbcType=VARCHAR},#{reportertype,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{locationx,jdbcType=VARCHAR}, #{locationy,jdbcType=VARCHAR}, #{accidentstate,jdbcType=VARCHAR}, 
+      #{accepttime,jdbcType=TIMESTAMP}, #{accepter,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{departmentid,jdbcType=VARCHAR}, #{emergencycall,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sx.weixin.model.FormalAccidentModel" >
+    insert into Tb_FormalAccident
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="formlaccidentid != null" >
+        formlAccidentId,
+      </if>
+      <if test="reportopenid != null" >
+        reportOpenId,
+      </if>
+      <if test="reporttime != null" >
+        reportTime,
+      </if>
+      <if test="reportphonenumber != null" >
+        reportPhoneNumber,
+      </if>
+      <if test="otherphonenumber != null" >
+        otherPhoneNumber,
+      </if>
+      <if test="reportertype != null" >
+        reporterType,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="locationx != null" >
+        locationX,
+      </if>
+      <if test="locationy != null" >
+        locationY,
+      </if>
+      <if test="accidentstate != null" >
+        accidentState,
+      </if>
+      <if test="accepttime != null" >
+        acceptTime,
+      </if>
+      <if test="accepter != null" >
+        accepter,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="departmentid != null" >
+        departmentId,
+      </if>
+      <if test="emergencycall != null" >
+        emergencyCall,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="formlaccidentid != null" >
+        #{formlaccidentid,jdbcType=VARCHAR},
+      </if>
+      <if test="reportopenid != null" >
+        #{reportopenid,jdbcType=VARCHAR},
+      </if>
+      <if test="reporttime != null" >
+        #{reporttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reportphonenumber != null" >
+        #{reportphonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="otherphonenumber != null" >
+        #{otherphonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="reportertype != null" >
+        #{reportertype,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="locationx != null" >
+        #{locationx,jdbcType=VARCHAR},
+      </if>
+      <if test="locationy != null" >
+        #{locationy,jdbcType=VARCHAR},
+      </if>
+      <if test="accidentstate != null" >
+        #{accidentstate,jdbcType=VARCHAR},
+      </if>
+      <if test="accepttime != null" >
+        #{accepttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accepter != null" >
+        #{accepter,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentid != null" >
+        #{departmentid,jdbcType=VARCHAR},
+      </if>
+      <if test="emergencycall != null" >
+        #{emergencycall,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sx.weixin.model.FormalAccidentModel" >
+    update Tb_FormalAccident
+    <set >
+      <if test="reportopenid != null" >
+        reportOpenId = #{reportopenid,jdbcType=VARCHAR},
+      </if>
+      <if test="reporttime != null" >
+        reportTime = #{reporttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reportphonenumber != null" >
+        reportPhoneNumber = #{reportphonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="otherphonenumber != null" >
+        otherPhoneNumber = #{otherphonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="reportertype != null" >
+        reporterType = #{reportertype,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="locationx != null" >
+        locationX = #{locationx,jdbcType=VARCHAR},
+      </if>
+      <if test="locationy != null" >
+        locationY = #{locationy,jdbcType=VARCHAR},
+      </if>
+      <if test="accidentstate != null" >
+        accidentState = #{accidentstate,jdbcType=VARCHAR},
+      </if>
+      <if test="accepttime != null" >
+        acceptTime = #{accepttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accepter != null" >
+        accepter = #{accepter,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentid != null" >
+        departmentId = #{departmentid,jdbcType=VARCHAR},
+      </if>
+      <if test="emergencycall != null" >
+        emergencyCall = #{emergencycall,jdbcType=BIT},
+      </if>
+    </set>
+    where formlAccidentId = #{formlaccidentid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sx.weixin.model.FormalAccidentModel" >
+    update Tb_FormalAccident
+    set reportOpenId = #{reportopenid,jdbcType=VARCHAR},
+      reportTime = #{reporttime,jdbcType=TIMESTAMP},
+      reportPhoneNumber = #{reportphonenumber,jdbcType=VARCHAR},
+      otherPhoneNumber = #{otherphonenumber,jdbcType=VARCHAR},
+      reporterType = #{reportertype,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      locationX = #{locationx,jdbcType=VARCHAR},
+      locationY = #{locationy,jdbcType=VARCHAR},
+      accidentState = #{accidentstate,jdbcType=VARCHAR},
+      acceptTime = #{accepttime,jdbcType=TIMESTAMP},
+      accepter = #{accepter,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      departmentId = #{departmentid,jdbcType=VARCHAR},
+      emergencyCall = #{emergencycall,jdbcType=BIT}
+    where formlAccidentId = #{formlaccidentid,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 自定义 -->
+  
+  <select id="maxFormlAccidentId"    resultType="java.lang.String">
+    select max(formlAccidentId)  from Tb_FormalAccident   
+    
+    where 1 = 1
+    <if test="reporttime != null  ">
+        and reportTime  &gt;= #{reporttime,jdbcType=TIMESTAMP}
+    </if>
+     
+    
+    <!--  &lt;        < 
+         &gt;          >     
+         &gt;          >  
+    &lt;&gt;   <>
+    &amp;      & 
+    &apos;      '
+    &quot;      "
+      -->
+  </select>
+  
+  
+</mapper>

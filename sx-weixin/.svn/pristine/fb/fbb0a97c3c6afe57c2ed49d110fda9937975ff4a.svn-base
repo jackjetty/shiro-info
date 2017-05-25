@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sx.weixin.dao.CustResMapper" >
+  <resultMap id="BaseResultMap" type="com.sx.weixin.model.CustResModel" >
+    <id column="custResId" property="custresid" jdbcType="INTEGER" />
+    <result column="processId" property="processid" jdbcType="VARCHAR" />
+    <result column="recordNo" property="recordno" jdbcType="VARCHAR" />
+    <result column="custResTime" property="custrestime" jdbcType="TIMESTAMP" />
+    <result column="openId" property="openid" jdbcType="VARCHAR" />
+    <result column="custResponser" property="custresponser" jdbcType="VARCHAR" />
+    <result column="custResType" property="custrestype" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.sx.weixin.model.CustResModel" extends="BaseResultMap" >
+    <result column="custResContent" property="custrescontent" jdbcType="CLOB" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    custResId, processId, recordNo, custResTime, openId, custResponser, custResType
+  </sql>
+  <sql id="Blob_Column_List" >
+    custResContent
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from Tb_CustRes
+    where custResId = #{custresid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Tb_CustRes
+    where custResId = #{custresid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sx.weixin.model.CustResModel" useGeneratedKeys="true" keyProperty="custresid" >
+    insert into Tb_CustRes (custResId, processId, recordNo, 
+      custResTime, openId, custResponser, 
+      custResType, custResContent)
+    values (#{custresid,jdbcType=INTEGER}, #{processid,jdbcType=VARCHAR}, #{recordno,jdbcType=VARCHAR}, 
+      #{custrestime,jdbcType=TIMESTAMP}, #{openid,jdbcType=VARCHAR}, #{custresponser,jdbcType=VARCHAR}, 
+      #{custrestype,jdbcType=VARCHAR}, #{custrescontent,jdbcType=CLOB})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sx.weixin.model.CustResModel" useGeneratedKeys="true" keyProperty="custresid" >
+    insert into Tb_CustRes
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="custresid != null" >
+        custResId,
+      </if>
+      <if test="processid != null" >
+        processId,
+      </if>
+      <if test="recordno != null" >
+        recordNo,
+      </if>
+      <if test="custrestime != null" >
+        custResTime,
+      </if>
+      <if test="openid != null" >
+        openId,
+      </if>
+      <if test="custresponser != null" >
+        custResponser,
+      </if>
+      <if test="custrestype != null" >
+        custResType,
+      </if>
+      <if test="custrescontent != null" >
+        custResContent,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="custresid != null" >
+        #{custresid,jdbcType=INTEGER},
+      </if>
+      <if test="processid != null" >
+        #{processid,jdbcType=VARCHAR},
+      </if>
+      <if test="recordno != null" >
+        #{recordno,jdbcType=VARCHAR},
+      </if>
+      <if test="custrestime != null" >
+        #{custrestime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="custresponser != null" >
+        #{custresponser,jdbcType=VARCHAR},
+      </if>
+      <if test="custrestype != null" >
+        #{custrestype,jdbcType=VARCHAR},
+      </if>
+      <if test="custrescontent != null" >
+        #{custrescontent,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sx.weixin.model.CustResModel" >
+    update Tb_CustRes
+    <set >
+      <if test="processid != null" >
+        processId = #{processid,jdbcType=VARCHAR},
+      </if>
+      <if test="recordno != null" >
+        recordNo = #{recordno,jdbcType=VARCHAR},
+      </if>
+      <if test="custrestime != null" >
+        custResTime = #{custrestime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="openid != null" >
+        openId = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="custresponser != null" >
+        custResponser = #{custresponser,jdbcType=VARCHAR},
+      </if>
+      <if test="custrestype != null" >
+        custResType = #{custrestype,jdbcType=VARCHAR},
+      </if>
+      <if test="custrescontent != null" >
+        custResContent = #{custrescontent,jdbcType=CLOB},
+      </if>
+    </set>
+    where custResId = #{custresid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sx.weixin.model.CustResModel" >
+    update Tb_CustRes
+    set processId = #{processid,jdbcType=VARCHAR},
+      recordNo = #{recordno,jdbcType=VARCHAR},
+      custResTime = #{custrestime,jdbcType=TIMESTAMP},
+      openId = #{openid,jdbcType=VARCHAR},
+      custResponser = #{custresponser,jdbcType=VARCHAR},
+      custResType = #{custrestype,jdbcType=VARCHAR},
+      custResContent = #{custrescontent,jdbcType=CLOB}
+    where custResId = #{custresid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sx.weixin.model.CustResModel" >
+    update Tb_CustRes
+    set processId = #{processid,jdbcType=VARCHAR},
+      recordNo = #{recordno,jdbcType=VARCHAR},
+      custResTime = #{custrestime,jdbcType=TIMESTAMP},
+      openId = #{openid,jdbcType=VARCHAR},
+      custResponser = #{custresponser,jdbcType=VARCHAR},
+      custResType = #{custrestype,jdbcType=VARCHAR}
+    where custResId = #{custresid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,125 @@
+package com.sx.weixin.job;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.sx.weixin.dao.AnnalsMapper;
+import com.sx.weixin.model.AnnalsModel;
+import com.sx.weixin.util.CommonUtil;
+import com.sx.weixin.util.HttpWeiUtil;
+import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
+ 
+
+@Component("wxJob")
+public class WXJob{
+	public static final Logger logger = LoggerFactory.getLogger(WXJob.class);
+	
+ 
+	
+	@Autowired
+	private AnnalsMapper annalsMapper;
+	
+	
+	@Value("${redirect.image.url}") 
+	protected String  REDIRECTIMAGEURL; 
+	
+	
+	@Value("${wei.appid}") 
+	protected String  WEIAPPID;
+	
+	@Value("${wei.appsecret}") 
+	protected String  WEIAPPSECRET; 
+	
+	@Transactional
+	public void annalsTask()  {  
+		HttpWeiUtil httpWeiUtil=  HttpWeiUtil.getInstance(WEIAPPID,WEIAPPSECRET);
+		String result="";
+		System.out.println("开始运行了啊");
+		try {
+			result=httpWeiUtil.batchMaterial(0, 20);
+		} catch (Exception e) { 
+			logger.error("annalsTask 出错{}", e.getMessage());
+			return;
+		}
+		result=CommonUtil.trim(result);
+		
+		if(result.equals("")){
+			return;
+		}
+		
+		JSONObject jsonObj = JSONObject.parseObject(result);
+		if(jsonObj.get("item_count")==null){
+			return;
+		}
+		Integer itemCount = jsonObj.getInteger("item_count"); 
+	 
+		JSONArray itemJsonArr=jsonObj.getJSONArray("item");
+		int createTime;
+		int updateTime;
+		String mediaId;
+		JSONObject itemJsonObj;
+		JSONArray newsItemJsonArr;
+		
+		List <AnnalsModel> annalsModelList=new ArrayList<AnnalsModel>();
+		for(int itemId=0;itemId<itemJsonArr.size();itemId++){
+			itemJsonObj=itemJsonArr.getJSONObject(itemId);
+			logger.error("获得的json串{}", itemJsonObj.toJSONString());
+			
+			mediaId=itemJsonObj.getString("media_id");
+			updateTime=itemJsonObj.getInteger("update_time");
+			createTime=itemJsonObj.getJSONObject("content").getInteger("create_time");
+			newsItemJsonArr=itemJsonObj.getJSONObject("content").getJSONArray("news_item");
+			calNewsItem(  mediaId ,  createTime,  updateTime,  newsItemJsonArr,  annalsModelList);
+			
+			
+		}  
+		for(AnnalsModel annalsModel:annalsModelList){ 
+			 if(annalsMapper.selectByPrimaryKey(annalsModel.getAnid()) ==null){
+				 annalsMapper.insertSelective(annalsModel);
+			 }
+			
+		}  
+		
+		
+	}
+	
+	private void calNewsItem(String mediaId ,int createTime,int updateTime,JSONArray newsItemJsonArr,List <AnnalsModel> annalsModelList){
+		AnnalsModel annalsModel;
+		JSONObject newsItemJsonObj;
+		String newsItemUrl;
+		//约束是同个图文消息里 图片不可能存在相同的
+		for(int newsItemId=0;newsItemId<newsItemJsonArr.size();newsItemId++){
+			newsItemJsonObj=newsItemJsonArr.getJSONObject(newsItemId);
+			newsItemUrl=newsItemJsonObj.getString("url");
+			annalsModel=new AnnalsModel();
+			annalsModel.setAnid(mediaId+newsItemJsonObj.getString("thumb_media_id"));
+			annalsModel.setAncreatetime(createTime);
+			annalsModel.setAntitle(newsItemJsonObj.getString("title"));
+			annalsModel.setThumburl(newsItemJsonObj.getString("thumb_url")); 
+			annalsModel.setAnupdatetime(updateTime);
+			annalsModel.setAnurl(newsItemUrl.replace("#rd", ""));
+			annalsModel.setMediaid(mediaId);
+			annalsModel.setThumbmediaid(newsItemJsonObj.getString("thumb_media_id"));
+			annalsModel.setAnvalid(true);
+			annalsModelList.add(annalsModel);
+		} 
+		
+	}
+	
+	 
+}

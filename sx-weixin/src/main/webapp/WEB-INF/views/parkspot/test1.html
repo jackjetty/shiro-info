@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" /> 
+	<title>地址转换</title>  
+	<link type="text/css" rel="stylesheet" href="${CONTEXT_PATH}/resources/js/tencent/css/style.css" /> 
+	<link type="text/css" rel="stylesheet" href="${CONTEXT_PATH}/resources/css/parkspot/map.css" />  
+	<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/jquery.min.js"></script> 
+	<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/tencent/msgbox.js"></script>
+	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=QV5BZ-OLTHG-NKMQF-I4KIQ-7A356-HVFQM"></script>
+	<script type="text/javascript" charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=QV5BZ-OLTHG-NKMQF-I4KIQ-7A356-HVFQM&libraries=convertor"></script>
+	<script type="text/javascript">
+		$(function() {
+			ZENG.msgbox.show("加载中...", 6);
+		}); 
+		var map ;
+	 
+		$(function() {
+			$("#container").css("height", $(window).height()  );
+			$("#container").css("width", $(window).width()); 
+			//30.00325, 120.5800953
+			
+			 
+			var center = new qq.maps.LatLng(30.001222, 120.582704);
+			map = new qq.maps.Map(document.getElementById('container'), {
+		        center: center,
+		        zoomControl: true,
+		        zoom:17 
+		    });
+			   
+			var marker = new qq.maps.Marker({
+		        position: center,
+		        draggable: true,
+		        map: map
+		  });
+			   qq.maps.event.addListener(map,'mousemove',function(event) {
+				   
+				   
+			    });
+			   
+			   fnTrans();
+			 /* qq.maps.event.addListener(map,'zoom_changed',function() {
+				 alert("1234");
+
+			    });*/
+			 
+			//
+			     /* qq.maps.event.addListener(map, 'click', function() {
+				 		
+				 		//alert("123");
+				    });*/
+							    
+			   
+			 
+		});
+		
+		 
+		
+		 
+		
+		
+		function fnTrans(){
+			var points = []; //路径的经纬坐标集合
+			var mappoint=new qq.maps.LatLng(30.003846, 120.578608);
+            points.push(mappoint);
+			qq.maps.convertor.translate(
+					points,1, function 
+					(res) { 
+						  
+						//copyToClipboard(res[0]) ; 
+						alert(res[0]);
+					//marker.setPosition(res[0]);
+					 
+					}); 
+		}
+ 
+		 
+		function copyToClipboard(txt) {
+		      if (window.clipboardData) {
+		        window.clipboardData.clearData();
+		        clipboardData.setData("Text", txt);
+		        alert("复制成功！");
+		  
+		      } else if (navigator.userAgent.indexOf("Opera") != -1) {
+		        window.location = txt;
+		      } else if (window.netscape) {
+		        try {
+		          netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+		        } catch (e) {
+		          alert("被浏览器拒绝！\n请在浏览器地址栏输入'about:config'并回车\n然后将 'signed.applets.codebase_principal_support'设置为'true'");
+		        }
+		        var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
+		        if (!clip)
+		          return;
+		        var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
+		        if (!trans)
+		          return;
+		        trans.addDataFlavor("text/unicode");
+		        var str = new Object();
+		        var len = new Object();
+		        var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+		        var copytext = txt;
+		        str.data = copytext;
+		        trans.setTransferData("text/unicode", str, copytext.length * 2);
+		        var clipid = Components.interfaces.nsIClipboard;
+		        if (!clip)
+		          return false;
+		        clip.setData(trans, null, clipid.kGlobalClipboard);
+		        alert("复制成功！");
+		      }
+		    }
+ </script>
+</head>
+   <body>
+<!--  class="header FixedTop"  --> 
+	<div id="page"> 
+		<div id="container" > 
+		</div>  
+	</div> 
+	</body>
+</html>

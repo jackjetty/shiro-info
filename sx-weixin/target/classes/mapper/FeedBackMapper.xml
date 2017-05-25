@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sx.weixin.dao.FeedBackMapper" >
+  <resultMap id="BaseResultMap" type="com.sx.weixin.model.FeedBackModel" >
+    <id column="feedBackId" property="feedbackid" jdbcType="INTEGER" />
+    <result column="feedTime" property="feedtime" jdbcType="TIMESTAMP" />
+    <result column="feedOpenId" property="feedopenid" jdbcType="VARCHAR" />
+    <result column="recordType" property="recordtype" jdbcType="VARCHAR" />
+    <result column="feedBackState" property="feedbackstate" jdbcType="VARCHAR" />
+    <result column="contact" property="contact" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.sx.weixin.model.FeedBackModel" extends="BaseResultMap" >
+    <result column="feedText" property="feedtext" jdbcType="CLOB" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    feedBackId, feedTime, feedOpenId, recordType, feedBackState, contact, remark
+  </sql>
+  <sql id="Blob_Column_List" >
+    feedText
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from Tb_FeedBack
+    where feedBackId = #{feedbackid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Tb_FeedBack
+    where feedBackId = #{feedbackid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sx.weixin.model.FeedBackModel" >
+    insert into Tb_FeedBack (feedBackId, feedTime, feedOpenId, 
+      recordType, feedBackState, contact, 
+      remark, feedText)
+    values (#{feedbackid,jdbcType=INTEGER}, #{feedtime,jdbcType=TIMESTAMP}, #{feedopenid,jdbcType=VARCHAR}, 
+      #{recordtype,jdbcType=VARCHAR}, #{feedbackstate,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{feedtext,jdbcType=CLOB})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sx.weixin.model.FeedBackModel" >
+    insert into Tb_FeedBack
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="feedbackid != null" >
+        feedBackId,
+      </if>
+      <if test="feedtime != null" >
+        feedTime,
+      </if>
+      <if test="feedopenid != null" >
+        feedOpenId,
+      </if>
+      <if test="recordtype != null" >
+        recordType,
+      </if>
+      <if test="feedbackstate != null" >
+        feedBackState,
+      </if>
+      <if test="contact != null" >
+        contact,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="feedtext != null" >
+        feedText,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="feedbackid != null" >
+        #{feedbackid,jdbcType=INTEGER},
+      </if>
+      <if test="feedtime != null" >
+        #{feedtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="feedopenid != null" >
+        #{feedopenid,jdbcType=VARCHAR},
+      </if>
+      <if test="recordtype != null" >
+        #{recordtype,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackstate != null" >
+        #{feedbackstate,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="feedtext != null" >
+        #{feedtext,jdbcType=CLOB},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sx.weixin.model.FeedBackModel" >
+    update Tb_FeedBack
+    <set >
+      <if test="feedtime != null" >
+        feedTime = #{feedtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="feedopenid != null" >
+        feedOpenId = #{feedopenid,jdbcType=VARCHAR},
+      </if>
+      <if test="recordtype != null" >
+        recordType = #{recordtype,jdbcType=VARCHAR},
+      </if>
+      <if test="feedbackstate != null" >
+        feedBackState = #{feedbackstate,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        contact = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="feedtext != null" >
+        feedText = #{feedtext,jdbcType=CLOB},
+      </if>
+    </set>
+    where feedBackId = #{feedbackid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sx.weixin.model.FeedBackModel" >
+    update Tb_FeedBack
+    set feedTime = #{feedtime,jdbcType=TIMESTAMP},
+      feedOpenId = #{feedopenid,jdbcType=VARCHAR},
+      recordType = #{recordtype,jdbcType=VARCHAR},
+      feedBackState = #{feedbackstate,jdbcType=VARCHAR},
+      contact = #{contact,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      feedText = #{feedtext,jdbcType=CLOB}
+    where feedBackId = #{feedbackid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sx.weixin.model.FeedBackModel" >
+    update Tb_FeedBack
+    set feedTime = #{feedtime,jdbcType=TIMESTAMP},
+      feedOpenId = #{feedopenid,jdbcType=VARCHAR},
+      recordType = #{recordtype,jdbcType=VARCHAR},
+      feedBackState = #{feedbackstate,jdbcType=VARCHAR},
+      contact = #{contact,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where feedBackId = #{feedbackid,jdbcType=INTEGER}
+  </update>
+</mapper>

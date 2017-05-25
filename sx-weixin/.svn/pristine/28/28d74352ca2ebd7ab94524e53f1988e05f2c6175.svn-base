@@ -1,0 +1,332 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>  
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+<title>自助移车</title>
+<link href="${CONTEXT_PATH}/resources/css/carmove/capture.css" rel="stylesheet" type="text/css">
+<link href="${CONTEXT_PATH}/resources/css/sweet-alert.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/weui.css"  type="text/css" />
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/add.css"  type="text/css" />
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/jquery.min.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> 
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/sweet-alert.min.js"></script> 
+<script type="text/javascript"> 
+	wx.config({
+	    debug: false,
+	    appId: "${WxAppId}", // 必填，公众号的唯一标识
+	    timestamp:"${WxTimestamp}", // 必填，生成签名的时间戳
+	    nonceStr: "${WxNoncestr}", // 必填，生成签名的随机串
+	    signature: "${WxSignature}",// 必填，签名，见附录1
+	    jsApiList: [ 
+	      'closeWindow',
+	      'scanQRCode',
+	      'hideOptionMenu',
+	      'chooseImage',
+	      'uploadImage',
+	      "getLocation"
+	    ]
+	}); 
+ 
+	
+	
+	wx.ready(function(){
+	     wx.getLocation({
+		    type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+		    success: function (res) {
+		    	// 纬度，浮点数，范围为90 ~ -90
+		    	$("form input[name=locationx]").val(res.latitude);
+		    	// 经度，浮点数，范围为180 ~ -180。
+		    	$("form input[name=locationy]").val(res.longitude);
+		    	 
+		        var speed = res.speed; // 速度，以米/每秒计
+		        var accuracy = res.accuracy; // 位置精度
+		         
+		    },
+		    error: function (res) {
+		    	alert("地理位置获取失败")  ;  
+		    	 
+	           	return false;
+		    }
+		 });
+	   
+	});
+</script>
+</head>
+
+<body>
+<div class="page">
+	
+	
+ 
+ <form method="post"   >
+ 
+    <div class="weui-cells__title">本人信息</div>
+        <div class="weui-cells weui-cells_form">
+             
+               <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label"><label class="weui-label">手机号码</label></label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="tel"  name="phonenumber"   placeholder="请输入手机号">
+                </div>
+               </div>   
+             
+        </div> 
+        
+        <input type="hidden" name="locationx" value="" />
+        <input type="hidden" name="locationy" value="" />
+       
+    
+    
+      <div class="weui-cells__title">违停车辆号牌</div>
+        <div class="weui-cells">
+
+            <div class="weui-cell weui-cell_select weui-cell_select-before">
+                <div class="weui-cell__hd">
+                    <select class="weui-select" name="select2">
+                        <option value="浙D">浙D</option> 
+                    </select>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input"   name="carnumber"   placeholder="请完善车牌号码"/>
+                </div>
+            </div>
+        </div>
+        
+        
+      <div class="weui-cells__title">车辆类型</div>
+        <div class="weui-cells weui-cells_radio">
+            <label class="weui-cell weui-check__label" for="x11">
+                <div class="weui-cell__bd">
+                    <p>黄牌</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="cartype" value="01" id="x11">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label" for="x12">
+
+                <div class="weui-cell__bd">
+                    <p>蓝牌</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" name="cartype" value="02" class="weui-check" id="x12" checked="checked">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+           
+        </div>   
+   
+    
+    <div class="photo">
+    	<div class="picture">
+            <div class="upload">
+            
+            
+            
+             <!--    <div class="more-box">
+						      <div    class="clear">
+						          <img  src="${CONTEXT_PATH}/resources/image/icon/delete.png"  alt="删除"/>
+						      </div>
+						      <img src="${CONTEXT_PATH}/resources/image/carmove/pic.png" class="car"/> 
+						       <input type="hidden" name="morepath" />
+			   </div>  -->
+                <div class="add">
+                    <img id="imgmore" src="${CONTEXT_PATH}/resources/image/carmove/add.png" class="addIcon"/>
+                    <span>点击上传车辆照片</span>
+                </div>
+                <b>所停车辆的位置信息(要求车牌清晰)</b>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <div class="page__bd page__bd_spacing">
+        <a href="javascript:fnSubmit();" class="weui-btn weui-btn_primary">提交</a>
+        
+    </div>
+    
+    
+  </form>
+    
+<div class="main">
+    <div class="box">
+            <h1>
+                    <div class="title">
+                            <img src="${CONTEXT_PATH}/resources/image/carmove/scope.png"/>
+                            <b>适用范围</b>
+                    </div>
+                    <span>仅用于绍兴市范围内停放的绍兴牌照的车辆影响交通，车主不在现场，也没留联系方式的情况。</span>
+            </h1>
+    </div>
+    <div class="box">
+            <h1>
+                    <div class="title">
+                            <img src="${CONTEXT_PATH}/resources/image/carmove/limit.png"/>
+                            <b>限制说明</b>
+                    </div>
+                    <span>同一微信号一天只能自助移车2次，</span>
+                    <span>同一辆车12小时内只会通知1次。</span>
+            </h1>
+    </div>
+</div>
+
+<footer>
+    <div class="copyright">
+        <img src="${CONTEXT_PATH}/resources/image/logo.png" class="logo"/>
+        <span>绍兴市公安局交通警察支队 版权所有</span>
+    </div>
+</footer>
+		
+</div>
+</body>
+</html>
+<script type="text/javascript">
+ 
+$(".upload").on("click",".clear", function() {
+	$(this).parent().remove(); 
+});
+
+ 
+
+
+function fnSubmit(){
+	
+	var phonenumber=$.trim($('input[name=phonenumber]').val());
+	var carnumber=$.trim($('input[name=carnumber]').val());
+	var locationx=$.trim($('input[name=locationx]').val());
+	var locationy=$.trim($('input[name=locationy]').val());
+	if(phonenumber.length!=11){
+		swal("信息不完整", "请输入正确的手机号码!","error");
+		return false;
+	}
+	if(carnumber.length!=5){
+		swal("信息不完整","请输入正确的车牌号码!","error");
+		return false;
+	}
+	if(locationx.length<1){
+		swal("信息不完整","位置信息无法获取!","error");
+		return false;
+	}
+	if($('input[name=morepath]').length<1){
+		swal("信息不完整","请上传图片信息!","error");
+		return false;
+	}
+	
+	 
+	
+	
+	$.ajax({
+		url : "${CONTEXT_PATH}/carmove/gain",
+		data : $("form").serialize(),
+		dataType : "json",
+		async : false,
+		type : "post",
+		success:function(data){
+			if(data.code==0){
+				//window.location.href="${CONTEXT_PATH}/accident/capture"; 
+				//alert(data.info);
+				 
+				 
+				 swal({   title: "谢谢!",   text: data.info,   type: "info",   
+	        		 showCancelButton: false,   closeOnConfirm: false  }, 
+	        			 function(){  history.go(-1);});
+				//wx.closeWindow();
+			}else{
+				swal("出错", data.info, "error"); 
+			}
+		},
+		error:function(){
+			swal("网络繁忙！"); 
+		}
+	});
+}
+
+
+
+$(".add").click(function(){
+	 
+	wx.chooseImage({
+	    count: 9, // 默认9
+	    sizeType: [ 'compressed','compressed'], // 可以指定是原图还是压缩图，默认二者都有
+	    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+	    success: function (res) {
+	    	var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+            //上传图片接口
+            /*
+            wx.uploadImage({
+                localId: localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                    var serverId = res.serverId; // 返回图片的服务器端ID
+                    
+                    fnDownMediaMore( serverId );
+                    
+                }
+            });*/
+            syncUpload(localIds); 
+	    }
+	});
+	
+});
+
+
+function syncUpload(localIds){
+    var localId = localIds.shift();
+    wx.uploadImage({
+        localId: localId,
+        isShowProgressTips: 1,
+        success: function (res) {
+            var serverId = res.serverId; // 返回图片的服务器端ID
+            fnDownMediaMore( serverId );
+            
+            if(localIds.length > 0){
+                syncUpload(localIds);
+            }
+
+            
+        }
+    });
+};
+
+
+function fnDownMediaMore(mediaId ){
+	
+	 
+	$.ajax({
+		url : "${CONTEXT_PATH}/download_media",
+		dataType : "json",
+		type : "post",
+		data : {
+			mediaId : mediaId  
+		},
+		success : function(data) { 
+			if(data.code==0){ 
+				
+				
+				var html='';
+				html+='<div class="more-box">';
+				html+='    <div    class="clear">';
+				html+='        <img  src="${CONTEXT_PATH}/resources/image/icon/delete.png"  alt="删除"/>';
+				html+='    </div>'; 
+				html+='    <img src="'+data.mediaUrl+'"  class="car" />'; 
+				html+='    <input type="hidden" name="morepath" value="'+data.mediaPath+'" />'; 
+				html+='</div>';      
+			    $(".add").before($(html));  
+			       
+			        
+				 
+			}
+		}
+	});
+}
+
+ 
+
+
+
+</script>

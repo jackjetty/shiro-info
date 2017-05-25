@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>  
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>交管动态</title>
+<link href="${CONTEXT_PATH}/resources/css/articletransport/grid.css" rel="stylesheet" type="text/css"> 
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/weui.css"  type="text/css" />
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/add.css"  type="text/css" />
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/jquery.min.js"></script> 
+</head>
+
+<body>
+<div class="page">
+		<div class="container">
+		
+				
+				<div class="List">
+				   <#list articleTransportGridRs.dtolist as articleTransportDto>
+						<a class="box" href="${CONTEXT_PATH}/articletransport/detail?atid=${articleTransportDto.atid}">
+                              <#if articleTransportDto.imgurl==''>
+                                  <ul  class="text1" >
+                               <#else>
+                                    <ul  class="text" > 
+                                </#if>
+                           
+                                    <li class="title">${articleTransportDto.attitle}</li>
+                                    <li class="time">${articleTransportDto.issuedate}</li>
+                            </ul>
+                            
+                              <#if articleTransportDto.imgurl==''>
+                                  
+                               <#else>
+                                    <img src="${articleTransportDto.imgurl}" class="picture"/>
+                                </#if> 
+						</a> 
+					</#list> 
+				
+				
+				
+						 
+				</div>
+				
+		</div>
+		   <div id="loading" class="weui-loadmore">
+	            <i class="weui-loading"></i>
+	            <span class="weui-loadmore__tips">正在加载</span>
+	        </div>
+	        <div  id="nodata" class="weui-loadmore weui-loadmore_line">
+	            <span class="weui-loadmore__tips" style="background-color: #EBEEEF;">暂无数据</span>
+	        </div>
+	        <div id="loadtip"  class="weui-loadmore weui-loadmore_line weui-loadmore_dot">
+	            <span class="weui-loadmore__tips" style="background-color: #EBEEEF;"></span>
+	        </div>
+		
+</div>
+</body>
+</html>
+
+<script type="text/javascript"> 
+
+ 
+$(function(){
+	 $(".page").height($(window).height());
+	 $("#loading").hide();
+	 $("#nodata").hide();
+	 $("#loadtip").show();
+	 
+	 
+});
+
+
+
+
+
+
+$(document).ready(function(){  
+        var range = 50;             //距下边界长度/单位px  
+        var hasmore = true;           //插入元素高度/单位px  
+        var pageno = 2;  
+        var totalheight = 0;  
+        var isload=false;
+        var main = $(".page");                     //主体元素  
+        $(window).scroll(function(){  
+            var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)  
+              
+            
+              
+            totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+            if(($(document).height()-range) <= totalheight  &&(!isload) && hasmore ) { 
+            	 
+            	 
+            	isload=true;
+            	 $("#loadtip").hide();
+            	 $("#loading").show();
+            	$.ajax({
+        		    url:"${CONTEXT_PATH}/articletransport/more",
+        		    type:'POST', //GET
+        		    async:true,    //或false,是否异步
+        		    data:{ 
+        		    	pageno:pageno
+        		    },
+        		    timeout:5000,    //超时时间
+        		    dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text 
+        		    success:function(data,textStatus,jqXHR){ 
+        		    	
+        		    	 isload=false;
+        		    	 $("#loadtip").show();
+                    	 $("#loading").hide();
+        		         if(data.code!=0){
+        		        	 alert(data.info);
+        		        	 
+        		        	 return;
+        		         }
+        		         var articleTransportDto;
+        		         var html;
+        		          
+        		         
+        		         if(data.dtolist.length<1){
+        		        	 hasmore=false;
+        		        	 $("#nodata").show();
+        		        	 $("#loadtip").hide();
+        		        	 return;
+        		         }
+        		         pageno++;  
+        		         $(data.dtolist).each(function(ind){ 
+        		        	 articleTransportDto=data.dtolist[ind];
+        		        	 html="";
+        		        	 html+='<a class="box" href="${CONTEXT_PATH}/articletransport/detail?atid='+articleTransportDto.atid+'">';
+        		        	 if(articleTransportDto.imgurl==''){
+        		        		 html+='  <ul  class="text1" >';
+        		        	 }else{
+        		        		 html+='  <ul  class="text" >';
+        		        	 }
+        		        	 html+='     <li class="title">'+articleTransportDto.attitle+'</li>';
+        		        	 html+='     <li class="time">'+articleTransportDto.issuedate+'</li>';
+        		        	 html+='  </ul>';
+        		        	 if(articleTransportDto.imgurl!=''){
+        		        		 html+='   <img src="'+articleTransportDto.imgurl+'" class="picture"/>';
+        		        	 }
+        		        	 html+='   </a>';     
+        					 $(".List").append($(html));  
+        						
+        					    
+                                 
+    						
+        		         });
+        		         
+        		    },
+        		    error:function(xhr,textStatus){ 
+        		    	alert("网络繁忙！");
+        		    } 
+        		});
+            	 
+                
+                 
+            }  
+        });  
+}); 
+
+
+
+    </script>   

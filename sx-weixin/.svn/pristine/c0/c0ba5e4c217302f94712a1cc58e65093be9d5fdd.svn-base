@@ -1,0 +1,60 @@
+package com.sx.weixin.service.impl;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+import org.apache.ibatis.annotations.Param;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.sx.weixin.dao.MonitorMapper;
+import com.sx.weixin.dao.PoliceSpotMapper; 
+import com.sx.weixin.dto.MonitorDto;
+import com.sx.weixin.dto.PoliceSpotDto;
+import com.sx.weixin.model.MonitorModel;
+import com.sx.weixin.model.PoliceSpotModel;
+import com.sx.weixin.model.VideoSpotModel;
+import com.sx.weixin.rs.MonitorMapRs;
+import com.sx.weixin.rs.MonitorSpotsRs;
+import com.sx.weixin.rs.PoliceSpotsRs;
+import com.sx.weixin.rs.TMCDetailRs;
+import com.sx.weixin.rs.MonitorMapRs;
+import com.sx.weixin.service.IPoliceSpotService;
+
+@Service("policespotService")
+public class PoliceSpotServiceImpl extends BaseServiceImpl implements IPoliceSpotService {
+	
+	public static final Logger logger = LoggerFactory.getLogger(PoliceSpotServiceImpl.class);
+ 
+	@Autowired
+	private PoliceSpotMapper policeSpotMapper;
+
+	/* (non-Javadoc)
+	 * @see com.sx.weixin.service.IPoliceSpotService#queryPoliceSpots(float, float, float, float)
+	 */
+	@Override
+	public PoliceSpotsRs queryPoliceSpots(float bigLat, float smallLat,
+			float bigLng, float smallLng) {
+		// TODO Auto-generated method stub
+		
+		PoliceSpotsRs policeSpotsRs=new PoliceSpotsRs();
+		List<PoliceSpotModel> policeSpotModelList = policeSpotMapper.selectScopeSpots(  bigLat,   smallLat,
+	    		 bigLng, smallLng);
+		PoliceSpotDto policeSpotDto;
+	    List<PoliceSpotDto>	policeSpotDtoList=new ArrayList<PoliceSpotDto>();
+	    for(PoliceSpotModel policeSpotModel:policeSpotModelList){
+	    	policeSpotDto=new PoliceSpotDto();
+	    	policeSpotDto.buildDto(policeSpotModel);
+	    	policeSpotDtoList.add(policeSpotDto); 
+	    }
+	    policeSpotsRs.setPoliceSpotDtoList(policeSpotDtoList);
+		// TODO Auto-generated method stub
+		return policeSpotsRs;
+		 
+	}
+	
+}

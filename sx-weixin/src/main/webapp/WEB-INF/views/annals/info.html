@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>  
+<head>
+<meta charset="utf-8"> 
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+<title>资讯检索</title>
+<link href="${CONTEXT_PATH}/resources/css/annals/info.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/weui.css"  type="text/css" />
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/add.css"  type="text/css" />
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/jquery.min.js"></script> 
+  
+   
+</head>  
+<body> 
+<div class="container">  
+
+        <div class="weui-search-bar" id="searchBar">
+            <form class="weui-search-bar__form" >
+                <div class="weui-search-bar__box">
+                    <i class="weui-icon-search"></i>
+                    <input name='keyword' type="search" class="weui-search-bar__input" id="searchInput"   placeholder="搜索" />
+                    <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+                </div>
+                <label class="weui-search-bar__label" id="searchText">
+                    <i class="weui-icon-search"></i>
+                    <span>搜索</span>
+                </label>
+            </form>
+	            <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+	        </div>
+	        <div class="weui-cells searchbar-result"  id="searchResult">
+	            
+	        </div> 
+	        
+	        <div class="List">
+					<#list annalsInfoRs.dtolist as annalsDto>
+						<a class="box" href="${annalsDto.anurl}">
+                            <ul class="text">
+                                    <li>${annalsDto.antitle}</li>
+                            </ul>
+                            <img  src="${annalsDto.thumburl}" class="picture"/>
+						</a> 
+					</#list> 
+			 </div>
+			 
+			 <div id="loading" class="weui-loadmore">
+	            <i class="weui-loading"></i>
+	            <span class="weui-loadmore__tips">正在加载</span>
+	        </div>
+	        <div  id="nodata" class="weui-loadmore weui-loadmore_line">
+	            <span class="weui-loadmore__tips" style="background-color: #EBEEEF;">暂无数据</span>
+	        </div>
+	        <div id="loadtip"  class="weui-loadmore weui-loadmore_line weui-loadmore_dot">
+	            <span class="weui-loadmore__tips" style="background-color: #EBEEEF;"></span>
+	        </div>
+        
+          
+ </div>  
+</body>  
+</html> 
+
+<script type="text/javascript">
+    $(function(){ 
+        var $searchBar = $('#searchBar'),
+            $searchResult = $('#searchResult'),
+            $searchText = $('#searchText'),
+            $searchInput = $('#searchInput'),
+            $searchClear = $('#searchClear'),
+            $searchCancel = $('#searchCancel');
+
+        $('#searchResult').hide();
+        
+        function hideSearchResult(){
+            $searchResult.hide();
+            
+            $searchInput.val('');
+            
+            
+            $("form").submit();
+        }
+        function cancelSearch(){
+            hideSearchResult();
+            $searchBar.removeClass('weui-search-bar_focusing');
+            $searchText.show();
+        }
+
+        $searchText.on('click', function(){
+            $searchBar.addClass('weui-search-bar_focusing');
+            $searchInput.focus();
+        });
+        $searchInput
+            .on('blur', function () {
+            	 
+                if(!this.value.length) 
+                	cancelSearch();
+            })
+            .on('input', function(){
+                if(this.value.length) {
+                    //$searchResult.show();
+                } else {
+                   // $searchResult.hide();
+                }
+            })
+        ;
+        $searchClear.on('click', function(){
+             hideSearchResult();
+            $searchInput.focus();
+        });
+        $searchCancel.on('click', function(){
+            cancelSearch();
+            $searchInput.blur();
+        });
+        
+        
+        
+    });
+    // onsearch="myFc()" required
+    function myFc() {
+    	   alert("123");
+    	}
+</script> 
+
+<script type="text/javascript"> 
+
+//console.log("滚动条到顶部的垂直高度: "+$(document).scrollTop());  
+//console.log("页面的文档高度 ："+$(document).height());  
+//console.log('浏览器的高度：'+$(window).height());  
+$(function(){
+	 $(".container").height($(window).height());
+	 $("#loading").hide();
+	 $("#nodata").hide();
+	 $("#loadtip").show();
+	 
+	 
+});
+
+
+
+
+
+
+$(document).ready(function(){  
+        var range = 50;             //距下边界长度/单位px  
+        var hasmore = true;           //插入元素高度/单位px  
+        var pageno = 2;  
+        var totalheight = 0;  
+        var isload=false;
+        var main = $(".container");                     //主体元素  
+        $(window).scroll(function(){  
+            var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)  
+              
+            
+              
+            totalheight = parseFloat($(window).height()) + parseFloat(srollPos);  
+            if(($(document).height()-range) <= totalheight  &&(!isload) && hasmore ) { 
+            	 
+            	var keyword=$.trim($("#searchInput").val());
+            	isload=true;
+            	 $("#loadtip").hide();
+            	 $("#loading").show();
+            	$.ajax({
+        		    url:"${CONTEXT_PATH}/annals/more",
+        		    type:'POST', //GET
+        		    async:true,    //或false,是否异步
+        		    data:{
+        		    	keyword:keyword,
+        		    	pageno:pageno
+        		    },
+        		    timeout:5000,    //超时时间
+        		    dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text 
+        		    success:function(data,textStatus,jqXHR){ 
+        		    	
+        		    	 isload=false;
+        		    	 $("#loadtip").show();
+                    	 $("#loading").hide();
+        		         if(data.code!=0){
+        		        	 alert(data.info);
+        		        	 
+        		        	 return;
+        		         }
+        		         var annalsDto;
+        		         var html;
+        		          
+        		         
+        		         if(data.dtolist.length<1){
+        		        	 hasmore=false;
+        		        	 $("#nodata").show();
+        		        	 $("#loadtip").hide();
+        		        	 return;
+        		         }
+        		         pageno++;  
+        		         $(data.dtolist).each(function(ind){ 
+        		        	 annalsDto=data.dtolist[ind];
+        		        	 html="";
+        		        	 html+='<a class="box" href="'+annalsDto.anurl+'" >';
+        						html+='    <ul class="text">';
+        						html+='        <li>'+annalsDto.antitle+'</li>';
+        						html+='    </ul>'; 
+        						html+='    <img src="'+annalsDto.thumburl+'"  class="picture" />'; 
+        						html+='  </a> ';     
+        						$(".List").append($(html));  
+        						
+        					    
+                                 
+    						
+        		         });
+        		         
+        		    },
+        		    error:function(xhr,textStatus){
+        		    	/*alert(xhr.status);
+                       alert(xhr.readyState);
+        		    	alert(textStatus);*/
+        		    	alert("网络繁忙！");
+        		    } 
+        		});
+            	 
+                
+                 
+            }  
+        });  
+}); 
+
+
+
+    </script>   

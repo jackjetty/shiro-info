@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>  
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>${articleDelictDetailRs.articleDelictDto.adtitle}</title>
+<link href="${CONTEXT_PATH}/resources/css/articledelict/detail.css" rel="stylesheet" type="text/css"> 
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/weui.css"  type="text/css" />
+<link rel="stylesheet" href="${CONTEXT_PATH}/resources/weui/add.css"  type="text/css" />
+<script type="text/javascript" src="${CONTEXT_PATH}/resources/js/jquery.min.js"></script> 
+</head> 
+
+<body>
+
+<div class="pop"  id="hint">
+		<img src="${CONTEXT_PATH}/resources/image/article/guide.png"/>
+</div>
+
+<div class="page">
+	<div class="mainTitle">
+    	<h1>${articleDelictDetailRs.articleDelictDto.adtitle}</h1>
+        <div class="time"><span>${articleDelictDetailRs.articleDelictDto.issuedate}</span><b>发布人:${articleDelictDetailRs.articleDelictDto.adauthor}</b></div>
+    </div>
+    <div class="container"> 
+    	<p>${articleDelictDetailRs.articleDelictDto.htmcontent}</p> 
+    </div>
+    
+    
+    <div class="footer">
+    	<a class="send" id="btn1">
+        	<div class="middle1">
+            	<img src="${CONTEXT_PATH}/resources/image/article/send.png"/>
+                <span>发送给朋友</span>
+            </div>
+        </a>
+        <a class="friends" id="btn2">
+        	<div class="middle2">
+            	<img src="${CONTEXT_PATH}/resources/image/article/friends.png"/>
+                <span>分享到朋友圈</span>
+            </div>
+        </a>
+    </div>
+    
+</div>
+</body>
+
+</html>
+
+<script type="text/javascript">
+$(document).ready(function($){
+
+	$("#btn1").click(function(event){
+		$("#hint").css({"display":"block"});
+	});
+	
+	$("#btn2").click(function(event){
+		$("#hint").css({"display":"block"});
+	});
+	
+	$("#hint").click(function(event) {
+		$("#hint").css({"display":"none"});
+	});
+});
+</script>
